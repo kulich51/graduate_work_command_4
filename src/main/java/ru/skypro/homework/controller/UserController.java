@@ -6,8 +6,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.RegisterReq;
+import ru.skypro.homework.dto.ResponseWrapper;
 import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.dto.User;
 import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.UserService;
 
 import static ru.skypro.homework.dto.Role.USER;
 
@@ -19,6 +22,7 @@ import static ru.skypro.homework.dto.Role.USER;
 public class UserController {
 
     private final AuthService authService;
+    private final UserService userService;
 
     @PostMapping
     ResponseEntity<?> addNewUser(@RequestBody RegisterReq user) {
@@ -28,6 +32,22 @@ public class UserController {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @GetMapping("me")
+    ResponseEntity<ResponseWrapper<User>> getAllUsers() {
+
+        return ResponseEntity.ok(userService.getAll());
+    }
+
+    @PatchMapping("me")
+    ResponseEntity<?> updateUser(@RequestBody User user) {
+
+        if (userService.save(user)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 }
