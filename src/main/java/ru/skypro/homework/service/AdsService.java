@@ -1,10 +1,7 @@
 package ru.skypro.homework.service;
 
 import org.springframework.http.ResponseEntity;
-import ru.skypro.homework.dto.Ads;
-import ru.skypro.homework.dto.AdsComment;
-import ru.skypro.homework.dto.CreateAds;
-import ru.skypro.homework.dto.ResponseWrapper;
+import ru.skypro.homework.dto.*;
 
 public interface AdsService {
 
@@ -14,4 +11,6 @@ public interface AdsService {
     AdsComment addAdsComment(Long adsId, AdsComment comment);
     AdsComment getAdsComment(Long adsId, Long commentId);
     AdsComment updateAdsComment(Long adsId, Long commentId, AdsComment comment);
+    FullAds getFullAds(Long adsId);
+    Ads updateAds(Long adsId, Ads updatedAds);
 }

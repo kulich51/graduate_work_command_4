@@ -5,10 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.Ads;
-import ru.skypro.homework.dto.AdsComment;
-import ru.skypro.homework.dto.CreateAds;
-import ru.skypro.homework.dto.ResponseWrapper;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AdsService;
 
 @Slf4j
@@ -76,6 +73,23 @@ public class AdsController {
         return ResponseEntity.ok(adsService.updateAdsComment(adsId, commentId, comment));
     }
 
+    @DeleteMapping("/ads/{id}")
+    ResponseEntity<?> removeAds(@PathVariable Long id) {
 
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/ads/{id}")
+    ResponseEntity<FullAds> getFullAds(@PathVariable Long id) {
+
+        return ResponseEntity.ok(adsService.getFullAds(id));
+    }
+
+    @PatchMapping("/ads/{id}")
+    ResponseEntity<Ads> updateAds(@PathVariable Long id,
+                                  @RequestBody Ads updatedAds) {
+
+        return ResponseEntity.ok(adsService.updateAds(id, updatedAds));
+    }
 
 }
