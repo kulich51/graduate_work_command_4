@@ -22,14 +22,9 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    ResponseEntity<?> addNewUser(@RequestBody RegisterReq user) {
+    ResponseEntity<CreateUser> addNewUser(@RequestBody CreateUser user) {
 
-        Role role = user.getRole() == null ? USER : user.getRole();
-        if (authService.register(user, role)) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping("me")
@@ -39,20 +34,20 @@ public class UserController {
     }
 
     @PatchMapping("me")
-    ResponseEntity<?> updateUser(@RequestBody User user) {
+    ResponseEntity<User> updateUser(@RequestBody User user) {
 
         if (userService.save(user)) {
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(user);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
     @PostMapping("set_password")
-    ResponseEntity<?> changePassword(@RequestBody NewPassword newPassword) {
+    ResponseEntity<NewPassword> changePassword(@RequestBody NewPassword newPassword) {
 
         if (userService.changePassword(newPassword)) {
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(newPassword);
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
