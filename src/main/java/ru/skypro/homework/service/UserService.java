@@ -9,4 +9,5 @@ public interface UserService {
     ResponseWrapper<User> getAll();
     boolean save(User user);
     boolean changePassword(NewPassword newPassword);
+    User getUserById(Long id);
 }
