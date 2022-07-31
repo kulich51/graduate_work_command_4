@@ -2,6 +2,7 @@ package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.Ads;
@@ -54,6 +55,26 @@ public class AdsController {
         return ResponseEntity.ok(adsService.addAdsComment(adsId, comment));
     }
 
+    @DeleteMapping("/ads/{ad_pk}/comment/{id}")
+    ResponseEntity<?> deleteAdsComment(@PathVariable(value = "ad_pk") Long adsId,
+                                       @PathVariable(value = "id") Long commentId) {
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/ads/{ad_pk}/comment/{id}")
+    ResponseEntity<AdsComment> getAdsComment(@PathVariable(value = "ad_pk") Long adsId,
+                                             @PathVariable(value = "id") Long commentId) {
+
+        return ResponseEntity.ok(adsService.getAdsComment(adsId, commentId));
+    }
+
+    @PatchMapping("/ads/{ad_pk}/comment/{id}")
+    ResponseEntity<AdsComment> updateAdsComment(@PathVariable(value = "ad_pk") Long adsId,
+                                                @PathVariable(value = "id") Long commentId,
+                                                @RequestBody AdsComment comment) {
+        return ResponseEntity.ok(adsService.updateAdsComment(adsId, commentId, comment));
+    }
 
 
 

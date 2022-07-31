@@ -12,4 +12,6 @@ public interface AdsService {
     Ads save(CreateAds ads);
     ResponseWrapper<AdsComment> getAdsComments(Long adsId);
     AdsComment addAdsComment(Long adsId, AdsComment comment);
+    AdsComment getAdsComment(Long adsId, Long commentId);
+    AdsComment updateAdsComment(Long adsId, Long commentId, AdsComment comment);
 }
