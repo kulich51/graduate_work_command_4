@@ -29,4 +29,16 @@ public class AdsController {
 
         return ResponseEntity.ok(adsService.save(ads));
     }
+
+    @GetMapping("me")
+    ResponseEntity<ResponseWrapper<Ads>> getAdsMe(@RequestParam(required = false) Boolean authenticated,
+                                                  @RequestParam(value = "authorities[0].authority", required = false) Boolean authority,
+                                                  @RequestParam(required = false) Object credentials,
+                                                  @RequestParam(required = false) Object details,
+                                                  @RequestParam(required = false) Object principal) {
+
+        return ResponseEntity.ok(adsService.getAllAds());
+    }
+
+
 }
