@@ -5,10 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.RegisterReq;
-import ru.skypro.homework.dto.ResponseWrapper;
-import ru.skypro.homework.dto.Role;
-import ru.skypro.homework.dto.User;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.UserService;
 
@@ -50,4 +47,16 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+    @PostMapping("set_password")
+    ResponseEntity<?> changePassword(@RequestBody NewPassword newPassword) {
+
+        if (userService.changePassword(newPassword)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+    }
+
+
 }
