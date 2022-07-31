@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.Ads;
+import ru.skypro.homework.dto.AdsComment;
 import ru.skypro.homework.dto.CreateAds;
 import ru.skypro.homework.dto.ResponseWrapper;
 import ru.skypro.homework.service.AdsService;
@@ -39,6 +40,21 @@ public class AdsController {
 
         return ResponseEntity.ok(adsService.getAllAds());
     }
+
+    @GetMapping("{ad_pk}/comment")
+    ResponseEntity<ResponseWrapper<AdsComment>> getAdsComments(@PathVariable(value = "ad_pk") Long adsId) {
+
+        return ResponseEntity.ok(adsService.getAdsComments(adsId));
+    }
+
+    @PostMapping("{ad_pk}/comment")
+    ResponseEntity<AdsComment> addAdsComment(@PathVariable(value = "ad_pk") Long adsId,
+                                             @RequestBody AdsComment comment) {
+
+        return ResponseEntity.ok(adsService.addAdsComment(adsId, comment));
+    }
+
+
 
 
 }
