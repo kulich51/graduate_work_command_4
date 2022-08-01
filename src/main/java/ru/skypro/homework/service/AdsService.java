@@ -8,7 +8,7 @@ public interface AdsService {
     ResponseWrapper<Ads> getAllAds();
     Ads save(CreateAds ads);
     ResponseWrapper<AdsComment> getAdsComments(Long adsId);
-    AdsComment addAdsComment(Long adsId, AdsComment comment);
+    AdsComment addAdsComment(Long adsId, AdsComment adsComment);
     AdsComment getAdsComment(Long adsId, Long commentId);
     AdsComment updateAdsComment(Long adsId, Long commentId, AdsComment comment);
     FullAds getFullAds(Long adsId);

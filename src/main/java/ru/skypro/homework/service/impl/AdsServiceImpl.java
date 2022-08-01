@@ -2,10 +2,19 @@ package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.entity.Comment;
+import ru.skypro.homework.mappper.CommentMapper;
+import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.service.AdsService;
 
 @Service
 public class AdsServiceImpl implements AdsService {
+
+    private final CommentRepository commentRepository;
+
+    public AdsServiceImpl(CommentRepository commentRepository) {
+        this.commentRepository = commentRepository;
+    }
 
     @Override
     public ResponseWrapper<Ads> getAllAds() {
@@ -23,8 +32,12 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdsComment addAdsComment(Long adsId, AdsComment comment) {
-        return null;
+    public AdsComment addAdsComment(Long adsId, AdsComment adsComment) {
+
+        Comment comment = CommentMapper.INSTANCE.adsCommentToComment(adsComment);
+        commentRepository.save(comment);
+        return CommentMapper
+                .INSTANCE.commentToAdsComment(comment);
     }
 
     @Override
