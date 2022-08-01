@@ -33,7 +33,6 @@ public class AdsServiceImpl implements AdsService {
         return AdsMapper.INSTANCE.adsToAdsDto(newAds);
     }
 
-
     @Override
     public ResponseWrapper<AdsComment> getAdsComments(Long adsId) {
         return null;
