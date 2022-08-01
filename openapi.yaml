@@ -463,7 +463,7 @@ paths:
           description: Not Found
       summary: register
       tags:
-      - Авторизация
+      - Регистрация
       x-codegen-request-body-name: req
       x-contentType: application/json
       x-accepts: '*/*'
