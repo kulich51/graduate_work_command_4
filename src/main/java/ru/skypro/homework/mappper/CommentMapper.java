@@ -14,6 +14,6 @@ public interface CommentMapper {
     @Mapping(source = "pk", target = "adsId")
     Comment adsCommentToComment(AdsComment comment);
 
-    @Mapping(target = "pk", source = "adsId")
+    @Mapping(source = "adsId", target = "pk")
     AdsComment commentToAdsComment(Comment comment);
 }
