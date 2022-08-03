@@ -3,7 +3,7 @@ package ru.skypro.homework.service.impl;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.entity.Comment;
-import ru.skypro.homework.mappper.CommentMapper;
+import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.service.AdsService;
 

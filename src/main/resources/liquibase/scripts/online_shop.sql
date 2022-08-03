@@ -24,3 +24,12 @@ create table authorities
     authority varchar(50) not null,
     foreign key (username) references users (username)
 );
+
+--changeset kulich51:table_users_profiles
+create table users_profiles
+(
+    username varchar(50) primary key,
+    first_name varchar(50) not null,
+    last_name varchar(50) not null,
+    phone varchar(20) not null
+)

@@ -18,14 +18,7 @@ import static ru.skypro.homework.dto.Role.USER;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final AuthService authService;
     private final UserService userService;
-
-    @PostMapping
-    ResponseEntity<CreateUser> addNewUser(@RequestBody CreateUser user) {
-
-        return ResponseEntity.ok(user);
-    }
 
     @GetMapping("me")
     ResponseEntity<ResponseWrapper<User>> getAllUsers() {
