@@ -13,7 +13,7 @@ create table comments
 --changeset kulich51:tables users and authorities
 create table users
 (
-    username    varchar(50) not null primary key,
+    username    varchar(50) not null primary key ,
     password    varchar(120) not null,
     enabled     boolean not null
 );
@@ -28,8 +28,10 @@ create table authorities
 --changeset kulich51:table_users_profiles
 create table users_profiles
 (
-    username varchar(50) primary key,
+    id serial primary key,
+    email varchar(50),
     first_name varchar(50) not null,
     last_name varchar(50) not null,
-    phone varchar(20) not null
-)
+    phone varchar(20) not null,
+    foreign key (email) references users (username)
+);

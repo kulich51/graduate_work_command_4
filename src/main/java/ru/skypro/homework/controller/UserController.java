@@ -5,11 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.*;
-import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.dto.NewPassword;
+import ru.skypro.homework.dto.ResponseWrapper;
+import ru.skypro.homework.dto.User;
 import ru.skypro.homework.service.UserService;
-
-import static ru.skypro.homework.dto.Role.USER;
 
 @Slf4j
 @CrossOrigin(origins = "http://localhost:3000")

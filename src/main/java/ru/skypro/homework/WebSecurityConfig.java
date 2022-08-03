@@ -37,7 +37,7 @@ public class WebSecurityConfig {
     };
 
     @Bean
-    @Primary
+//    @Primary
     public InMemoryUserDetailsManager userDetailsService() {
         UserDetails user = User.withDefaultPasswordEncoder()
                 .username("user@gmail.com")
@@ -48,7 +48,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-//    @Primary
+    @Primary
     public JdbcUserDetailsManager jdbcDetailsService() {
 
         PGSimpleDataSource dbSource = new PGSimpleDataSource();
