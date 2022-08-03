@@ -12,7 +12,7 @@ import ru.skypro.homework.service.UserService;
 import static ru.skypro.homework.dto.Role.USER;
 
 @Slf4j
-@CrossOrigin(value = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("users")
 @RequiredArgsConstructor
@@ -28,12 +28,7 @@ public class UserController {
 
     @PatchMapping("me")
     ResponseEntity<User> updateUser(@RequestBody User user) {
-
-        if (userService.save(user)) {
-            return ResponseEntity.ok(user);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping("set_password")

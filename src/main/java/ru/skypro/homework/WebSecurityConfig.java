@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -35,6 +37,7 @@ public class WebSecurityConfig {
     };
 
     @Bean
+    @Primary
     public InMemoryUserDetailsManager userDetailsService() {
         UserDetails user = User.withDefaultPasswordEncoder()
                 .username("user@gmail.com")
@@ -45,7 +48,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    @Primary
+//    @Primary
     public JdbcUserDetailsManager jdbcDetailsService() {
 
         PGSimpleDataSource dbSource = new PGSimpleDataSource();
@@ -68,8 +71,11 @@ public class WebSecurityConfig {
 //                                .mvcMatchers("/ads/**", "/users/**").authenticated()
 
                 )
-                .cors().disable()
-                .httpBasic(withDefaults());
+                .cors();
+//                Эта строка мешают CORS
+//                .disable()
+//                Из-за этой строки всплывает 403 ошибка
+//                .httpBasic(withDefaults());
         return http.build();
     }
 
@@ -77,6 +83,5 @@ public class WebSecurityConfig {
 
         return datasource.substring(datasource.lastIndexOf("/") + 1);
     }
-
 }
 
