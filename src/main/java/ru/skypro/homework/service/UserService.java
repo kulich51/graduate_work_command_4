@@ -10,7 +10,6 @@ public interface UserService {
 
     Collection<User> getAll();
     User update(User user);
-    boolean save(User user);
     boolean changePassword(NewPassword newPassword);
     User getUserById(Long id);
 }

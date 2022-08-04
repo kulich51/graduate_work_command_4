@@ -5,6 +5,7 @@ import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.entity.UserProfile;
 import ru.skypro.homework.exception.NullEmailException;
+import ru.skypro.homework.exception.UserNotFoundException;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserProfileRepository;
 import ru.skypro.homework.service.UserService;
@@ -26,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
         Collection<UserProfile> userProfiles = userProfileRepository.findAll();
         return userProfiles.stream()
-                .map(userProfile -> UserMapper.INSTANCE.userProfileToUser(userProfile))
+                .map(UserMapper.INSTANCE::userProfileToUser)
                 .collect(Collectors.toSet());
     }
 
@@ -41,18 +42,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean save(User user) {
-        return false;
-    }
-
-    @Override
     public boolean changePassword(NewPassword newPassword) {
         return false;
     }
 
     @Override
     public User getUserById(Long id) {
-        return null;
+
+        if (userProfileRepository.existsById(id)) {
+            UserProfile userProfile = userProfileRepository.getById(id);
+            return UserMapper.INSTANCE.userProfileToUser(userProfile);
+        }
+        throw new UserNotFoundException();
     }
 
     private void checkEmailNotNull(User user) {
