@@ -52,9 +52,10 @@ public class AuthServiceImpl implements AuthService {
                         .build()
         );
 
-        UserProfile userProfile = UserMapper.INSTANCE.registerReqToUserProfile(registerReq);
-        System.out.println(userProfile);
-        userProfileRepository.save(userProfile);
+// Во фронтенде ошибка. Имя, фамилия и телефон не передаются в бэкенд при регистрации
+//        UserProfile userProfile = UserMapper.INSTANCE.registerReqToUserProfile(registerReq);
+//        System.out.println(userProfile);
+//        userProfileRepository.save(userProfile);
 
         return true;
     }
