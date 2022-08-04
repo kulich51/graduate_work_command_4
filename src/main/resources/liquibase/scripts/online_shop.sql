@@ -28,10 +28,12 @@ create table authorities
 --changeset kulich51:table_users_profiles
 create table users_profiles
 (
-    id serial primary key,
+    id serial,
     email varchar(50),
     first_name varchar(50) not null,
     last_name varchar(50) not null,
     phone varchar(20) not null,
-    foreign key (email) references users (username)
+    foreign key (email) references users (username),
+    primary key (id, email),
+    constraint unique_email unique (email)
 );

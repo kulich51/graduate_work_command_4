@@ -10,6 +10,8 @@ import ru.skypro.homework.dto.ResponseWrapper;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.service.UserService;
 
+import java.util.Collection;
+
 @Slf4j
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -22,12 +24,14 @@ public class UserController {
     @GetMapping("me")
     ResponseEntity<ResponseWrapper<User>> getAllUsers() {
 
-        return ResponseEntity.ok(userService.getAll());
+        Collection<User> users = userService.getAll();
+        return ResponseEntity.ok(new ResponseWrapper<User>(users));
     }
 
     @PatchMapping("me")
     ResponseEntity<User> updateUser(@RequestBody User user) {
-        return ResponseEntity.ok(user);
+
+        return ResponseEntity.ok(userService.update(user));
     }
 
     @PostMapping("set_password")

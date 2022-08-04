@@ -9,5 +9,5 @@ public class User {
     private final String lastName;
     private final String phone;
     private final Long id;
-    private final String email;
+    private String email;
 }
