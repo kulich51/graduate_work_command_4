@@ -3,7 +3,7 @@ package ru.skypro.homework.dto;
 import lombok.Data;
 
 @Data
-public class Ads {
+public class AdsDto {
 
     private final String image;
     private final Long author;

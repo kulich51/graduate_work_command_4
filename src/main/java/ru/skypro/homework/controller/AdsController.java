@@ -18,23 +18,23 @@ public class AdsController {
     private final AdsService adsService;
 
     @GetMapping
-    ResponseEntity<ResponseWrapper<Ads>> getAllAds() {
+    ResponseEntity<ResponseWrapper<AdsDto>> getAllAds() {
 
         return ResponseEntity.ok(adsService.getAllAds());
     }
 
     @PostMapping
-    ResponseEntity<Ads> createAds(@RequestBody CreateAds ads) {
+    ResponseEntity<AdsDto> createAds(@RequestBody CreateAds ads) {
 
         return ResponseEntity.ok(adsService.save(ads));
     }
 
     @GetMapping("me")
-    ResponseEntity<ResponseWrapper<Ads>> getAdsMe(@RequestParam(required = false) Boolean authenticated,
-                                                  @RequestParam(value = "authorities[0].authority", required = false) Boolean authority,
-                                                  @RequestParam(required = false) Object credentials,
-                                                  @RequestParam(required = false) Object details,
-                                                  @RequestParam(required = false) Object principal) {
+    ResponseEntity<ResponseWrapper<AdsDto>> getAdsMe(@RequestParam(required = false) Boolean authenticated,
+                                                     @RequestParam(value = "authorities[0].authority", required = false) Boolean authority,
+                                                     @RequestParam(required = false) Object credentials,
+                                                     @RequestParam(required = false) Object details,
+                                                     @RequestParam(required = false) Object principal) {
 
         return ResponseEntity.ok(adsService.getAllAds());
     }
@@ -86,8 +86,8 @@ public class AdsController {
     }
 
     @PatchMapping("/ads/{id}")
-    ResponseEntity<Ads> updateAds(@PathVariable Long id,
-                                  @RequestBody Ads updatedAds) {
+    ResponseEntity<AdsDto> updateAds(@PathVariable Long id,
+                                     @RequestBody AdsDto updatedAds) {
 
         return ResponseEntity.ok(adsService.updateAds(id, updatedAds));
     }

@@ -2,8 +2,11 @@ package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.Comment;
+import ru.skypro.homework.mappper.AdsMapper;
 import ru.skypro.homework.mappper.CommentMapper;
+import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.service.AdsService;
 
@@ -11,19 +14,23 @@ import ru.skypro.homework.service.AdsService;
 public class AdsServiceImpl implements AdsService {
 
     private final CommentRepository commentRepository;
+    private final AdsRepository adsRepository;
 
-    public AdsServiceImpl(CommentRepository commentRepository) {
+    public AdsServiceImpl(CommentRepository commentRepository, AdsRepository adsRepository) {
         this.commentRepository = commentRepository;
+        this.adsRepository = adsRepository;
     }
 
     @Override
-    public ResponseWrapper<Ads> getAllAds() {
+    public ResponseWrapper<AdsDto> getAllAds() {
         return null;
     }
 
     @Override
-    public Ads save(CreateAds ads) {
-        return null;
+    public AdsDto save(CreateAds ads) {
+
+        Ads newAds = adsRepository.save(AdsMapper.INSTANCE.createAdsToAds(ads));
+        return AdsMapper.INSTANCE.adsToAdsDto(newAds);
     }
 
     @Override
@@ -56,7 +63,7 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public Ads updateAds(Long adsId, Ads updatedAds) {
+    public AdsDto updateAds(Long adsId, AdsDto updatedAds) {
         return null;
     }
 }
