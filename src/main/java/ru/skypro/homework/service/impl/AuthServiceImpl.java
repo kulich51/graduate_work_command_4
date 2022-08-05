@@ -58,14 +58,4 @@ public class AuthServiceImpl implements AuthService {
 
         return true;
     }
-
-    private UserProfile getUserProfile(RegisterReq registerReq) {
-
-        UserProfile userProfile = new UserProfile();
-        userProfile.setEmail(registerReq.getUsername());
-        userProfile.setFirstName(registerReq.getFirstName());
-        userProfile.setLastName(registerReq.getLastName());
-        userProfile.setPhone(registerReq.getPhone());
-        return userProfile;
-    }
 }
