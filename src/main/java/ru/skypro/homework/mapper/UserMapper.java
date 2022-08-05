@@ -12,9 +12,6 @@ public interface UserMapper {
 
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    @Mapping(source = "username", target = "email")
-    UserProfile registerReqToUserProfile(RegisterReq registerReq);
-
     UserProfile UserToUserProfile(User user);
     User userProfileToUser(UserProfile userProfile);
 }
