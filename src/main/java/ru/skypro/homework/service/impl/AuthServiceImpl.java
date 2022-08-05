@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.RegisterReq;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.entity.UserProfile;
-import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserProfileRepository;
 import ru.skypro.homework.service.AuthService;
 
