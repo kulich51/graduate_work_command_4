@@ -119,7 +119,7 @@ paths:
       summary: getAdsMe
       tags:
       - Объявления
-      x-accepts: '*/*'
+      x-accepts: '*/*'у
   /ads/{ad_pk}/comment:
     get:
       operationId: getAdsCommentsUsingGET
