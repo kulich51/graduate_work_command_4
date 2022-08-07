@@ -4,11 +4,15 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.Comment;
+import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.mappper.AdsMapper;
 import ru.skypro.homework.mappper.CommentMapper;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.service.AdsService;
+
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 @Service
 public class AdsServiceImpl implements AdsService {
@@ -22,8 +26,12 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public ResponseWrapper<AdsDto> getAllAds() {
-        return null;
+    public Collection<AdsDto> getAllAds() {
+
+        Collection<Ads> ads = adsRepository.findAll();
+        return ads.stream()
+                .map(AdsMapper.INSTANCE::adsToAdsDto)
+                .collect(Collectors.toSet());
     }
 
     @Override

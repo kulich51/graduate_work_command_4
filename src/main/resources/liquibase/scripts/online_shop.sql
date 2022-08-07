@@ -38,7 +38,8 @@ create table users_profiles
     constraint unique_email unique (email)
 );
 
---changeset kulich51:table_ads
+--changeset kulich51:table_ads runOnChange:true
+drop table ads;
 create table ads
 (
     id      serial primary key,
@@ -47,4 +48,7 @@ create table ads
     image   text not null,
     price   integer not null,
     foreign key (user_id) references users_profiles(id)
-)
+);
+
+--changeset kulich51:table_ads_rename_user_id
+alter table ads rename column user_id to user_profile_id;

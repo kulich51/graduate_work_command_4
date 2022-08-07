@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.service.AdsService;
 
 @Slf4j
@@ -20,7 +21,8 @@ public class AdsController {
     @GetMapping
     ResponseEntity<ResponseWrapper<AdsDto>> getAllAds() {
 
-        return ResponseEntity.ok(adsService.getAllAds());
+        ResponseWrapper<AdsDto> ads = new ResponseWrapper<>(adsService.getAllAds());
+        return ResponseEntity.ok(ads);
     }
 
     @PostMapping
@@ -36,7 +38,8 @@ public class AdsController {
                                                      @RequestParam(required = false) Object details,
                                                      @RequestParam(required = false) Object principal) {
 
-        return ResponseEntity.ok(adsService.getAllAds());
+        ResponseWrapper<AdsDto> ads = new ResponseWrapper<>(adsService.getAllAds());
+        return ResponseEntity.ok(ads);
     }
 
     @GetMapping("{ad_pk}/comment")
