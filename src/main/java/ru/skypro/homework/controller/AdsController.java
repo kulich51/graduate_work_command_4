@@ -73,8 +73,8 @@ public class AdsController {
     @PatchMapping("/ads/{ad_pk}/comment/{id}")
     ResponseEntity<AdsComment> updateAdsComment(@PathVariable(value = "ad_pk") Long adsId,
                                                 @PathVariable(value = "id") Long commentId,
-                                                @RequestBody AdsComment comment) {
-        return ResponseEntity.ok(adsService.updateAdsComment(adsId, commentId, comment));
+                                                @RequestBody AdsComment adsComment) {
+        return ResponseEntity.ok(adsService.updateAdsComment(adsId, commentId, adsComment));
     }
 
     @DeleteMapping("/ads/{id}")

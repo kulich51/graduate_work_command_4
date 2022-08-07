@@ -74,8 +74,16 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdsComment updateAdsComment(Long adsId, Long commentId, AdsComment comment) {
-        return null;
+    public AdsComment updateAdsComment(Long adsId, Long commentId, AdsComment adsComment) {
+
+        Comment oldComment = commentRepository.getByAdsIdAndId(adsId, commentId);
+        if (oldComment != null) {
+
+            Comment newComment = CommentMapper.INSTANCE.adsCommentToComment(adsComment);
+            newComment.setId(oldComment.getId());
+            return mapToAdsComment(commentRepository.save(newComment));
+        }
+        throw new CommentNotFoundException();
     }
 
     @Override
