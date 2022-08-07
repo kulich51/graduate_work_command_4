@@ -52,3 +52,6 @@ create table ads
 
 --changeset kulich51:table_ads_rename_user_id
 alter table ads rename column user_id to user_profile_id;
+
+--changeset kulich51:comments_add_fk
+alter table comments add constraint fk_ads foreign key (ads_id) references ads(id);
