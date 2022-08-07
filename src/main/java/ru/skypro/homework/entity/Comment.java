@@ -18,7 +18,7 @@ public class Comment {
     @Column(name = "ads_id")
     private Long adsId;
 
-    @Column(name = "author")
+    @Column(name = "user_profile_id")
     private Long author;
 
     @Column(name = "created_at")

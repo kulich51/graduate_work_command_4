@@ -44,20 +44,22 @@ public class AdsController {
     @GetMapping("{ad_pk}/comment")
     ResponseEntity<ResponseWrapper<AdsComment>> getAdsComments(@PathVariable(value = "ad_pk") Long adsId) {
 
-        return ResponseEntity.ok(adsService.getAdsComments(adsId));
+        ResponseWrapper<AdsComment> ads = new ResponseWrapper<>(adsService.getAdsComments(adsId));
+        return ResponseEntity.ok(ads);
     }
 
     @PostMapping("{ad_pk}/comment")
     ResponseEntity<AdsComment> addAdsComment(@PathVariable(value = "ad_pk") Long adsId,
                                              @RequestBody AdsComment comment) {
 
+        comment.setPk(adsId);
         return ResponseEntity.ok(adsService.addComment(adsId, comment));
     }
 
     @DeleteMapping("/ads/{ad_pk}/comment/{id}")
     ResponseEntity<?> deleteAdsComment(@PathVariable(value = "ad_pk") Long adsId,
                                        @PathVariable(value = "id") Long commentId) {
-
+        adsService.deleteComment(adsId, commentId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

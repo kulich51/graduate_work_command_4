@@ -9,6 +9,6 @@ public class AdsComment {
 
     private final Date createdAt;
     private final Long author;
-    private final Long pk;
+    private Long pk;
     private final String text;
 }

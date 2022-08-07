@@ -43,8 +43,12 @@ public class AdsServiceImpl implements AdsService {
 
 
     @Override
-    public ResponseWrapper<AdsComment> getAdsComments(Long adsId) {
-        return null;
+    public Collection<AdsComment> getAdsComments(Long adsId) {
+
+        Collection<Comment> comments = commentRepository.getByAdsId(adsId);
+        return comments.stream()
+                .map(CommentMapper.INSTANCE::commentToAdsComment)
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -54,6 +58,11 @@ public class AdsServiceImpl implements AdsService {
         commentRepository.save(comment);
         return CommentMapper
                 .INSTANCE.commentToAdsComment(comment);
+    }
+
+    @Override
+    public void deleteComment(Long adsId, Long commentId) {
+        commentRepository.deleteByAdsIdAndId(adsId, commentId);
     }
 
     @Override
