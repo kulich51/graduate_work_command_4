@@ -14,6 +14,6 @@ public interface AdsService {
     void deleteComment(Long adsId, Long commentId);
     AdsComment updateAdsComment(Long adsId, Long commentId, AdsComment comment);
     void removeAds(Long adsId);
-    FullAds getFullAds(Long adsId);
-    AdsDto updateAds(Long adsId, AdsDto updatedAds);
+    FullAdsDto getFullAds(Long adsId);
+    AdsDto updateAds(AdsDto updatedAds);
 }

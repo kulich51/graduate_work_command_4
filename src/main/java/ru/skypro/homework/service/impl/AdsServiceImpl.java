@@ -4,12 +4,13 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.Comment;
+import ru.skypro.homework.entity.UserProfile;
 import ru.skypro.homework.exception.CommentNotFoundException;
-import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.mappper.AdsMapper;
-import ru.skypro.homework.mappper.CommentMapper;
+import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
+import ru.skypro.homework.repository.UserProfileRepository;
 import ru.skypro.homework.service.AdsService;
 
 import java.util.Collection;
@@ -20,10 +21,12 @@ public class AdsServiceImpl implements AdsService {
 
     private final CommentRepository commentRepository;
     private final AdsRepository adsRepository;
+    private final UserProfileRepository userProfileRepository;
 
-    public AdsServiceImpl(CommentRepository commentRepository, AdsRepository adsRepository) {
+    public AdsServiceImpl(CommentRepository commentRepository, AdsRepository adsRepository, UserProfileRepository userProfileRepository) {
         this.commentRepository = commentRepository;
         this.adsRepository = adsRepository;
+        this.userProfileRepository = userProfileRepository;
     }
 
     @Override
@@ -94,13 +97,27 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public FullAds getFullAds(Long adsId) {
-        return null;
+    public FullAdsDto getFullAds(Long adsId) {
+
+//        Long userProfileId = adsRepository.getUserProfileId(adsId);
+//        List<Object[]> fullAds = adsRepository.getFullAds(adsId, userProfileId);
+//        return getFullAds(
+//                (Ads) fullAds.get(0)[0],
+//                (UserProfile) fullAds.get(0)[1]
+//        );
+
+        Ads ads = adsRepository.findById(adsId).get();
+        UserProfile user = userProfileRepository.getById(ads.getAuthor());
+        return getFullAds(ads, user);
     }
 
     @Override
-    public AdsDto updateAds(Long adsId, AdsDto updatedAds) {
-        return null;
+    public AdsDto updateAds(AdsDto updatedAds) {
+        Ads ads = AdsMapper.INSTANCE.adsDtoToAds(updatedAds);
+
+        return AdsMapper
+                .INSTANCE
+                .adsToAdsDto(adsRepository.save(ads));
     }
 
     private AdsComment mapToAdsComment(Comment comment) {
@@ -114,5 +131,19 @@ public class AdsServiceImpl implements AdsService {
         if (comment == null) {
             throw new CommentNotFoundException();
         }
+    }
+
+    private FullAdsDto getFullAds(Ads ads, UserProfile user) {
+
+        FullAdsDto fullAds = new FullAdsDto();
+        fullAds.setPk(ads.getId());
+        fullAds.setTitle(ads.getTitle());
+        fullAds.setImage(ads.getImage());
+        fullAds.setPrice(ads.getPrice());
+        fullAds.setEmail(user.getEmail());
+        fullAds.setAuthorFirstName(user.getFirstName());
+        fullAds.setAuthorLastName(user.getLastName());
+        fullAds.setPhone(user.getPhone());
+        return fullAds;
     }
 }

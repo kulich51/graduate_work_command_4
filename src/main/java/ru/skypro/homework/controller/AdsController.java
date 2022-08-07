@@ -85,7 +85,7 @@ public class AdsController {
     }
 
     @GetMapping("/ads/{id}")
-    ResponseEntity<FullAds> getFullAds(@PathVariable Long id) {
+    ResponseEntity<FullAdsDto> getFullAds(@PathVariable Long id) {
 
         return ResponseEntity.ok(adsService.getFullAds(id));
     }
@@ -93,8 +93,7 @@ public class AdsController {
     @PatchMapping("/ads/{id}")
     ResponseEntity<AdsDto> updateAds(@PathVariable Long id,
                                      @RequestBody AdsDto updatedAds) {
-
-        return ResponseEntity.ok(adsService.updateAds(id, updatedAds));
+        updatedAds.setPk(id);
+        return ResponseEntity.ok(adsService.updateAds(updatedAds));
     }
-
 }
