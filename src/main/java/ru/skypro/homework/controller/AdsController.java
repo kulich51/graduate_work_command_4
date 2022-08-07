@@ -80,6 +80,7 @@ public class AdsController {
     @DeleteMapping("/ads/{id}")
     ResponseEntity<?> removeAds(@PathVariable Long id) {
 
+        adsService.removeAds(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

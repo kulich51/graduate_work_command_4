@@ -13,6 +13,7 @@ public interface AdsService {
     AdsComment getAdsComment(Long adsId, Long commentId);
     void deleteComment(Long adsId, Long commentId);
     AdsComment updateAdsComment(Long adsId, Long commentId, AdsComment comment);
+    void removeAds(Long adsId);
     FullAds getFullAds(Long adsId);
     AdsDto updateAds(Long adsId, AdsDto updatedAds);
 }

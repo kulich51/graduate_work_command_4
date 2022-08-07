@@ -87,6 +87,13 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
+    public void removeAds(Long adsId) {
+
+        commentRepository.deleteAllByAdsId(adsId);
+        adsRepository.deleteAllById(adsId);
+    }
+
+    @Override
     public FullAds getFullAds(Long adsId) {
         return null;
     }
