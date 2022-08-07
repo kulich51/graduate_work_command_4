@@ -1,7 +1,6 @@
 package ru.skypro.homework.service;
 
 import ru.skypro.homework.dto.NewPassword;
-import ru.skypro.homework.dto.ResponseWrapper;
 import ru.skypro.homework.dto.User;
 
 import java.util.Collection;
