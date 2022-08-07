@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.*;
-import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.service.AdsService;
 
 @Slf4j
@@ -52,7 +51,7 @@ public class AdsController {
     ResponseEntity<AdsComment> addAdsComment(@PathVariable(value = "ad_pk") Long adsId,
                                              @RequestBody AdsComment comment) {
 
-        return ResponseEntity.ok(adsService.addAdsComment(adsId, comment));
+        return ResponseEntity.ok(adsService.addComment(adsId, comment));
     }
 
     @DeleteMapping("/ads/{ad_pk}/comment/{id}")

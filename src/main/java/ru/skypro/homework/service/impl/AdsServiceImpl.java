@@ -48,7 +48,7 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdsComment addAdsComment(Long adsId, AdsComment adsComment) {
+    public AdsComment addComment(Long adsId, AdsComment adsComment) {
 
         Comment comment = CommentMapper.INSTANCE.adsCommentToComment(adsComment);
         commentRepository.save(comment);
