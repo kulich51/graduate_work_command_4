@@ -11,28 +11,29 @@ public class Ads {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
+    @Column(name = "user_profile_id")
+    private Long author;
+
+    @Column(name = "title")
+    private String title;
 
     @Column(name = "image")
     private String image;
-    @Column(name = "author")
-    private Long author;
+
     @Column(name = "price")
     private int price;
-    @Column(name = "pk")
-    private Long pk;
-    @Column(name = "title")
-    private String title;
 
     public Ads() {
 
     }
 
-    public Ads(String image, Long author, int price, Long pk, String title) {
+    public Ads(Long id, String image, Long author, int price, String title) {
+        this.id = id;
         this.image = image;
         this.author = author;
         this.price = price;
-        this.pk = pk;
         this.title = title;
     }
 }

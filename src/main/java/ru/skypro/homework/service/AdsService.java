@@ -12,5 +12,4 @@ public interface AdsService {
     AdsComment updateAdsComment(Long adsId, Long commentId, AdsComment comment);
     FullAds getFullAds(Long adsId);
     AdsDto updateAds(Long adsId, AdsDto updatedAds);
-
 }

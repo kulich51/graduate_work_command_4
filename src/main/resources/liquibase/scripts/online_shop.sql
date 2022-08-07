@@ -25,15 +25,26 @@ create table authorities
     foreign key (username) references users (username)
 );
 
---changeset kulich51:table_users_profiles
+--changeset kulich51:table_users_profiles runOnChange:true
+drop table users_profiles;
 create table users_profiles
 (
-    id serial,
+    id serial primary key,
     email varchar(50),
     first_name varchar(50) not null,
     last_name varchar(50) not null,
     phone varchar(20) not null,
     foreign key (email) references users (username),
-    primary key (id, email),
     constraint unique_email unique (email)
 );
+
+--changeset kulich51:table_ads
+create table ads
+(
+    id      serial primary key,
+    user_id bigint not null,
+    title   text not null,
+    image   text not null,
+    price   integer not null,
+    foreign key (user_id) references users_profiles(id)
+)

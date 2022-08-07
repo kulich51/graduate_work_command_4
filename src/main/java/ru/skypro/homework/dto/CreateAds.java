@@ -8,6 +8,6 @@ public class CreateAds {
     private final Long pk;
     private final Long author;
     private final String title;
-    private final int price;
     private final String image;
+    private final int price;
 }
