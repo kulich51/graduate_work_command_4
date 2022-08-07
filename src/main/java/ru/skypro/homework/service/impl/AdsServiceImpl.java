@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.Comment;
+import ru.skypro.homework.exception.CommentNotFoundException;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.mappper.AdsMapper;
 import ru.skypro.homework.mappper.CommentMapper;
@@ -56,8 +57,7 @@ public class AdsServiceImpl implements AdsService {
 
         Comment comment = CommentMapper.INSTANCE.adsCommentToComment(adsComment);
         commentRepository.save(comment);
-        return CommentMapper
-                .INSTANCE.commentToAdsComment(comment);
+        return mapToAdsComment(comment);
     }
 
     @Override
@@ -67,7 +67,10 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public AdsComment getAdsComment(Long adsId, Long commentId) {
-        return null;
+
+        Comment comment = commentRepository.getByAdsIdAndId(adsId, commentId);
+        checkNullComment(comment);
+        return mapToAdsComment(comment);
     }
 
     @Override
@@ -83,5 +86,18 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public AdsDto updateAds(Long adsId, AdsDto updatedAds) {
         return null;
+    }
+
+    private AdsComment mapToAdsComment(Comment comment) {
+
+        return CommentMapper
+                .INSTANCE.commentToAdsComment(comment);
+    }
+
+    private void checkNullComment(Comment comment) {
+
+        if (comment == null) {
+            throw new CommentNotFoundException();
+        }
     }
 }
