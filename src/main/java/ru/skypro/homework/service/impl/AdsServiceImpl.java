@@ -6,7 +6,7 @@ import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.Comment;
 import ru.skypro.homework.entity.UserProfile;
 import ru.skypro.homework.exception.CommentNotFoundException;
-import ru.skypro.homework.mappper.AdsMapper;
+import ru.skypro.homework.mapper.AdsMapper;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
@@ -71,7 +71,7 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public AdsComment getAdsComment(Long adsId, Long commentId) {
 
-        Comment comment = commentRepository.getByAdsIdAndId(adsId, commentId);
+        Comment comment = commentRepository.getByAdsIdAndId(adsId, commentId).get();
         checkNullComment(comment);
         return mapToAdsComment(comment);
     }
@@ -79,7 +79,7 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public AdsComment updateAdsComment(Long adsId, Long commentId, AdsComment adsComment) {
 
-        Comment oldComment = commentRepository.getByAdsIdAndId(adsId, commentId);
+        Comment oldComment = commentRepository.getByAdsIdAndId(adsId, commentId).get();
         if (oldComment != null) {
 
             Comment newComment = CommentMapper.INSTANCE.adsCommentToComment(adsComment);
@@ -99,15 +99,8 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public FullAdsDto getFullAds(Long adsId) {
 
-//        Long userProfileId = adsRepository.getUserProfileId(adsId);
-//        List<Object[]> fullAds = adsRepository.getFullAds(adsId, userProfileId);
-//        return getFullAds(
-//                (Ads) fullAds.get(0)[0],
-//                (UserProfile) fullAds.get(0)[1]
-//        );
-
         Ads ads = adsRepository.findById(adsId).get();
-        UserProfile user = userProfileRepository.getById(ads.getAuthor());
+        UserProfile user = ads.getAuthor();
         return getFullAds(ads, user);
     }
 
@@ -140,6 +133,7 @@ public class AdsServiceImpl implements AdsService {
         fullAds.setTitle(ads.getTitle());
         fullAds.setImage(ads.getImage());
         fullAds.setPrice(ads.getPrice());
+        fullAds.setDescription(ads.getDescription());
         fullAds.setEmail(user.getEmail());
         fullAds.setAuthorFirstName(user.getFirstName());
         fullAds.setAuthorLastName(user.getLastName());

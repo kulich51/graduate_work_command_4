@@ -6,7 +6,7 @@ import lombok.Data;
 public class CreateAds {
 
     private final Long pk;
-    private final Long author;
+    private final User author;
     private final String title;
     private final String image;
     private final int price;

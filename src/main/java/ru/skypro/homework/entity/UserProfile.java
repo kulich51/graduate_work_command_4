@@ -3,6 +3,7 @@ package ru.skypro.homework.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "users_profiles")
@@ -25,4 +26,7 @@ public class UserProfile {
 
     @Column(name = "phone")
     private String phone;
+
+    @OneToMany(mappedBy="author")
+    private Set<Ads> ads;
 }

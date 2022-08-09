@@ -59,3 +59,6 @@ alter table comments add constraint fk_ads foreign key (ads_id) references ads(i
 --changeset kulich51:comments_add_fk_to_user_profiles
 alter table comments rename column author to user_profile_id;
 alter table comments add constraint fk_ads_user_profiles foreign key (user_profile_id) references users_profiles(id);
+
+--changeset kulich51:ads_create_description_column
+alter table ads add column description text;

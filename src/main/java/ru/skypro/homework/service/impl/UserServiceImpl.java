@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
     public User getUserById(Long id) {
 
         if (userProfileRepository.existsById(id)) {
-            UserProfile userProfile = userProfileRepository.getById(id);
+            UserProfile userProfile = userProfileRepository.findById(id).get();
             return UserMapper.INSTANCE.userProfileToUser(userProfile);
         }
         throw new UserNotFoundException();
