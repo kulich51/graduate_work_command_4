@@ -18,44 +18,48 @@ public class AdsController {
     private final AdsService adsService;
 
     @GetMapping
-    ResponseEntity<ResponseWrapper<Ads>> getAllAds() {
+    ResponseEntity<ResponseWrapper<AdsDto>> getAllAds() {
 
-        return ResponseEntity.ok(adsService.getAllAds());
+        ResponseWrapper<AdsDto> ads = new ResponseWrapper<>(adsService.getAllAds());
+        return ResponseEntity.ok(ads);
     }
 
     @PostMapping
-    ResponseEntity<Ads> createAds(@RequestBody CreateAds ads) {
+    ResponseEntity<AdsDto> createAds(@RequestBody CreateAds ads) {
 
         return ResponseEntity.ok(adsService.save(ads));
     }
 
     @GetMapping("me")
-    ResponseEntity<ResponseWrapper<Ads>> getAdsMe(@RequestParam(required = false) Boolean authenticated,
-                                                  @RequestParam(value = "authorities[0].authority", required = false) Boolean authority,
-                                                  @RequestParam(required = false) Object credentials,
-                                                  @RequestParam(required = false) Object details,
-                                                  @RequestParam(required = false) Object principal) {
+    ResponseEntity<ResponseWrapper<AdsDto>> getAdsMe(@RequestParam(required = false) Boolean authenticated,
+                                                     @RequestParam(value = "authorities[0].authority", required = false) Boolean authority,
+                                                     @RequestParam(required = false) Object credentials,
+                                                     @RequestParam(required = false) Object details,
+                                                     @RequestParam(required = false) Object principal) {
 
-        return ResponseEntity.ok(adsService.getAllAds());
+        ResponseWrapper<AdsDto> ads = new ResponseWrapper<>(adsService.getAllAds());
+        return ResponseEntity.ok(ads);
     }
 
     @GetMapping("{ad_pk}/comment")
     ResponseEntity<ResponseWrapper<AdsComment>> getAdsComments(@PathVariable(value = "ad_pk") Long adsId) {
 
-        return ResponseEntity.ok(adsService.getAdsComments(adsId));
+        ResponseWrapper<AdsComment> ads = new ResponseWrapper<>(adsService.getAdsComments(adsId));
+        return ResponseEntity.ok(ads);
     }
 
     @PostMapping("{ad_pk}/comment")
     ResponseEntity<AdsComment> addAdsComment(@PathVariable(value = "ad_pk") Long adsId,
                                              @RequestBody AdsComment comment) {
 
-        return ResponseEntity.ok(adsService.addAdsComment(adsId, comment));
+        comment.setPk(adsId);
+        return ResponseEntity.ok(adsService.addComment(adsId, comment));
     }
 
     @DeleteMapping("/ads/{ad_pk}/comment/{id}")
     ResponseEntity<?> deleteAdsComment(@PathVariable(value = "ad_pk") Long adsId,
                                        @PathVariable(value = "id") Long commentId) {
-
+        adsService.deleteComment(adsId, commentId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -69,27 +73,27 @@ public class AdsController {
     @PatchMapping("/ads/{ad_pk}/comment/{id}")
     ResponseEntity<AdsComment> updateAdsComment(@PathVariable(value = "ad_pk") Long adsId,
                                                 @PathVariable(value = "id") Long commentId,
-                                                @RequestBody AdsComment comment) {
-        return ResponseEntity.ok(adsService.updateAdsComment(adsId, commentId, comment));
+                                                @RequestBody AdsComment adsComment) {
+        return ResponseEntity.ok(adsService.updateAdsComment(adsId, commentId, adsComment));
     }
 
     @DeleteMapping("/ads/{id}")
     ResponseEntity<?> removeAds(@PathVariable Long id) {
 
+        adsService.removeAds(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping("/ads/{id}")
-    ResponseEntity<FullAds> getFullAds(@PathVariable Long id) {
+    ResponseEntity<FullAdsDto> getFullAds(@PathVariable Long id) {
 
         return ResponseEntity.ok(adsService.getFullAds(id));
     }
 
     @PatchMapping("/ads/{id}")
-    ResponseEntity<Ads> updateAds(@PathVariable Long id,
-                                  @RequestBody Ads updatedAds) {
-
-        return ResponseEntity.ok(adsService.updateAds(id, updatedAds));
+    ResponseEntity<AdsDto> updateAds(@PathVariable Long id,
+                                     @RequestBody AdsDto updatedAds) {
+        updatedAds.setPk(id);
+        return ResponseEntity.ok(adsService.updateAds(updatedAds));
     }
-
 }
