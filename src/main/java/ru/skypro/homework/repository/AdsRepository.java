@@ -13,5 +13,5 @@ import java.util.Optional;
 public interface AdsRepository extends JpaRepository<Ads, Long> {
 
     void deleteAllById(Long adsId);
-    Collection<Ads> findByTitleContains(String title);
+    Collection<Ads> findByTitleContainsOrderByTitle(String title);
 }
