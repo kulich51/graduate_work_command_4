@@ -6,7 +6,7 @@ import java.util.Collection;
 
 public interface AdsService {
 
-    Collection<AdsDto> getAllAds();
+    Collection<AdsDto> getAds(String title);
     AdsDto save(CreateAds ads);
     Collection<AdsComment> getAdsComments(Long adsId);
     AdsComment addComment(Long adsId, AdsComment adsComment);

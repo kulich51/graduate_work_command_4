@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.entity.Ads;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,4 +13,5 @@ import java.util.Optional;
 public interface AdsRepository extends JpaRepository<Ads, Long> {
 
     void deleteAllById(Long adsId);
+    Collection<Ads> findByTitleContains(String title);
 }
