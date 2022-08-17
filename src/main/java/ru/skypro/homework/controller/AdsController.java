@@ -18,9 +18,8 @@ public class AdsController {
     private final AdsService adsService;
 
     @GetMapping
-    ResponseEntity<ResponseWrapper<AdsDto>> getAllAds() {
-
-        ResponseWrapper<AdsDto> ads = new ResponseWrapper<>(adsService.getAllAds());
+    ResponseEntity<ResponseWrapper<AdsDto>> getAllAds(@RequestParam(required = false) String title) {
+        ResponseWrapper<AdsDto> ads = new ResponseWrapper<>(adsService.getAds(title));
         return ResponseEntity.ok(ads);
     }
 
@@ -31,13 +30,8 @@ public class AdsController {
     }
 
     @GetMapping("me")
-    ResponseEntity<ResponseWrapper<AdsDto>> getAdsMe(@RequestParam(required = false) Boolean authenticated,
-                                                     @RequestParam(value = "authorities[0].authority", required = false) Boolean authority,
-                                                     @RequestParam(required = false) Object credentials,
-                                                     @RequestParam(required = false) Object details,
-                                                     @RequestParam(required = false) Object principal) {
-
-        ResponseWrapper<AdsDto> ads = new ResponseWrapper<>(adsService.getAllAds());
+    ResponseEntity<ResponseWrapper<AdsDto>> getAdsMe(@RequestParam(required = false) String title) {
+        ResponseWrapper<AdsDto> ads = new ResponseWrapper<>(adsService.getAds(title));
         return ResponseEntity.ok(ads);
     }
 
