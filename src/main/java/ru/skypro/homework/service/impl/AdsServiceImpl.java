@@ -32,7 +32,7 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public Collection<AdsDto> getAds(String title) {
 
-        Collection<Ads> ads = adsRepository.findByTitleContains(title);
+        Collection<Ads> ads = adsRepository.findByTitleContainsOrderByTitle(title);
         return ads.stream()
                 .map(AdsMapper.INSTANCE::adsToAdsDto)
                 .collect(Collectors.toSet());
