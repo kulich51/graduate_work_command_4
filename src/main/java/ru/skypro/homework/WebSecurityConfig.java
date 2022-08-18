@@ -34,7 +34,7 @@ public class WebSecurityConfig {
             "/swagger-ui.html",
             "/v3/api-docs",
             "/webjars/**",
-            "/login", "/register",
+            "/login", "/register", "/ads"
     };
 
     @Bean
@@ -69,13 +69,10 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((authz) ->
                         authz
                                 .mvcMatchers(AUTH_WHITELIST).permitAll()
-//                                .mvcMatchers("/ads/**", "/users/**").authenticated()
+                                .mvcMatchers("/ads/**", "/users/**").authenticated()
                 )
-                .cors();
-//                Эта строка мешают CORS
-//                .disable()
-//                Из-за этой строки всплывает 403 ошибка
-//                .httpBasic(withDefaults());
+                .cors().and()
+                .httpBasic();
         return http.build();
     }
 
