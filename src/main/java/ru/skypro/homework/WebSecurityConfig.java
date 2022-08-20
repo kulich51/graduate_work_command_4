@@ -2,20 +2,12 @@ package ru.skypro.homework;
 
 import org.postgresql.ds.PGSimpleDataSource;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 public class WebSecurityConfig {
@@ -38,23 +30,11 @@ public class WebSecurityConfig {
     };
 
     @Bean
-//    @Primary
-    public InMemoryUserDetailsManager userDetailsService() {
-        UserDetails user = User.withDefaultPasswordEncoder()
-                .username("user@gmail.com")
-                .password("password")
-                .roles("USER")
-                .build();
-        return new InMemoryUserDetailsManager(user);
-    }
-
-    @Bean
-    @Primary
-    public JdbcUserDetailsManager jdbcDetailsService() {
+    public JdbcUserDetailsManager userDetailsService() {
 
         PGSimpleDataSource dbSource = new PGSimpleDataSource();
 
-        // Смотри документацию к методу setServerNames. Если serverNames == null, то по умолчанию сервер localhost
+//         Смотри документацию к методу setServerNames. Если serverNames == null, то по умолчанию сервер localhost
         dbSource.setServerNames(null);
         dbSource.setDatabaseName(getDbName(databaseUrl));
         dbSource.setUser(databaseUser);
@@ -64,15 +44,14 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
-                .authorizeHttpRequests((authz) ->
-                        authz
-                                .mvcMatchers(AUTH_WHITELIST).permitAll()
-                                .mvcMatchers("/ads/**", "/users/**").authenticated()
-                )
-                .cors().and()
+        http.cors().and().csrf().disable().authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/login", "/register").permitAll()
+                .antMatchers(HttpMethod.GET, "/ads").permitAll()
+                .antMatchers("/ads/**", "/users/**").authenticated()
+                .mvcMatchers(AUTH_WHITELIST).permitAll()
+                .and()
                 .httpBasic();
+
         return http.build();
     }
 
@@ -81,4 +60,3 @@ public class WebSecurityConfig {
         return datasource.substring(datasource.lastIndexOf("/") + 1);
     }
 }
-

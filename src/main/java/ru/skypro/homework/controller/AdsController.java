@@ -20,9 +20,9 @@ public class AdsController {
     @GetMapping
     ResponseEntity<ResponseWrapper<AdsDto>> getAllAds(@RequestParam(required = false) String title) {
 //        Заглушка
-//        ResponseWrapper<AdsDto> ads = new ResponseWrapper<>(adsService.getAds(title));
-//        return ResponseEntity.ok(ads);
-        return ResponseEntity.ok().build();
+//       ResponseWrapper<AdsDto> ads = new ResponseWrapper<>(adsService.getAds(title));
+//       return ResponseEntity.ok(ads);
+       return ResponseEntity.ok().build();
     }
 
     @PostMapping

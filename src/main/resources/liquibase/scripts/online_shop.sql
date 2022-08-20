@@ -26,7 +26,7 @@ create table authorities
 );
 
 --changeset kulich51:table_users_profiles runOnChange:true
-drop table users_profiles;
+--drop table users_profiles;
 create table users_profiles
 (
     id serial primary key,
@@ -39,7 +39,7 @@ create table users_profiles
 );
 
 --changeset kulich51:table_ads runOnChange:true
-drop table ads;
+--drop table if exists ads;
 create table ads
 (
     id      serial primary key,
