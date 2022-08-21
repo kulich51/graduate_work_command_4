@@ -104,8 +104,10 @@ public class AdsServiceImpl implements AdsService {
         Comment oldComment = commentRepository.getByAdsIdAndId(adsId, commentId).get();
         if (oldComment != null) {
 
+            checkUserAccess(adsId, commentId, authentication);
             Comment newComment = CommentMapper.INSTANCE.adsCommentToComment(adsComment);
-            newComment.setId(oldComment.getId());
+            newComment.setId(commentId);
+            newComment.setAdsId(adsId);
             return mapToAdsComment(commentRepository.save(newComment));
         }
         throw new CommentNotFoundException();
