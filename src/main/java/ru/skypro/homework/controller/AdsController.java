@@ -59,7 +59,7 @@ public class AdsController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @DeleteMapping("/ads/{ad_pk}/comment/{id}")
+    @DeleteMapping("/{ad_pk}/comment/{id}")
     ResponseEntity<?> deleteAdsComment(@PathVariable(value = "ad_pk") Long adsId,
                                        @PathVariable(value = "id") Long commentId,
                                        Authentication authentication) {
@@ -68,7 +68,7 @@ public class AdsController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @GetMapping("/ads/{ad_pk}/comment/{id}")
+    @GetMapping("/{ad_pk}/comment/{id}")
     ResponseEntity<AdsComment> getAdsComment(@PathVariable(value = "ad_pk") Long adsId,
                                              @PathVariable(value = "id") Long commentId) {
 
@@ -76,7 +76,7 @@ public class AdsController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @PatchMapping("/ads/{ad_pk}/comment/{id}")
+    @PatchMapping("/{ad_pk}/comment/{id}")
     ResponseEntity<AdsComment> updateAdsComment(@PathVariable(value = "ad_pk") Long adsId,
                                                 @PathVariable(value = "id") Long commentId,
                                                 @RequestBody AdsComment adsComment) {
@@ -84,7 +84,7 @@ public class AdsController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @DeleteMapping("/ads/{id}")
+    @DeleteMapping("/{id}")
     ResponseEntity<?> removeAds(@PathVariable Long id) {
 
         adsService.removeAds(id);
@@ -92,14 +92,14 @@ public class AdsController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @GetMapping("/ads/{id}")
+    @GetMapping("/{id}")
     ResponseEntity<FullAdsDto> getFullAds(@PathVariable Long id) {
 
         return ResponseEntity.ok(adsService.getFullAds(id));
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @PatchMapping("/ads/{id}")
+    @PatchMapping("/{id}")
     ResponseEntity<AdsDto> updateAds(@PathVariable Long id,
                                      @RequestBody AdsDto updatedAds) {
         updatedAds.setPk(id);
