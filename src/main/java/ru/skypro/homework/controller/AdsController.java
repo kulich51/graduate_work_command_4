@@ -102,8 +102,9 @@ public class AdsController {
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @PatchMapping("/{id}")
     ResponseEntity<AdsDto> updateAds(@PathVariable Long id,
-                                     @RequestBody AdsDto updatedAds) {
+                                     @RequestBody AdsDto updatedAds,
+                                     Authentication authentication) {
         updatedAds.setPk(id);
-        return ResponseEntity.ok(adsService.updateAds(updatedAds));
+        return ResponseEntity.ok(adsService.updateAds(updatedAds, authentication));
     }
 }

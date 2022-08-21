@@ -13,6 +13,7 @@ import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.Comment;
 import ru.skypro.homework.entity.UserProfile;
 import ru.skypro.homework.exception.AccessDeniedException;
+import ru.skypro.homework.exception.AdsNotFoundException;
 import ru.skypro.homework.exception.CommentNotFoundException;
 import ru.skypro.homework.mapper.AdsMapper;
 import ru.skypro.homework.mapper.CommentMapper;
@@ -131,12 +132,16 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdsDto updateAds(AdsDto updatedAds) {
-        Ads ads = AdsMapper.INSTANCE.adsDtoToAds(updatedAds);
+    public AdsDto updateAds(AdsDto updatedAds, Authentication authentication) {
 
-        return AdsMapper
-                .INSTANCE
-                .adsToAdsDto(adsRepository.save(ads));
+        if (adsRepository.existsById(updatedAds.getPk())) {
+            checkAdsAccess(updatedAds.getPk(), authentication);
+            Ads newAds = AdsMapper.INSTANCE.adsDtoToAds(updatedAds);
+            return AdsMapper
+                    .INSTANCE
+                    .adsToAdsDto(adsRepository.save(newAds));
+        }
+        throw  new AdsNotFoundException();
     }
 
     private AdsComment mapToAdsComment(Comment comment) {
