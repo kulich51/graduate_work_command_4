@@ -13,7 +13,7 @@ public interface AdsService {
     AdsComment addComment(Long adsId, AdsComment adsComment);
     AdsComment getAdsComment(Long adsId, Long commentId);
     void deleteComment(Long adsId, Long commentId, Authentication authentication);
-    AdsComment updateAdsComment(Long adsId, Long commentId, AdsComment comment);
+    AdsComment updateAdsComment(Long adsId, Long commentId, AdsComment comment, Authentication authentication);
     void removeAds(Long adsId);
     FullAdsDto getFullAds(Long adsId);
     AdsDto updateAds(AdsDto updatedAds);

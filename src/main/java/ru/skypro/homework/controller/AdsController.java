@@ -79,8 +79,9 @@ public class AdsController {
     @PatchMapping("/{ad_pk}/comment/{id}")
     ResponseEntity<AdsComment> updateAdsComment(@PathVariable(value = "ad_pk") Long adsId,
                                                 @PathVariable(value = "id") Long commentId,
-                                                @RequestBody AdsComment adsComment) {
-        return ResponseEntity.ok(adsService.updateAdsComment(adsId, commentId, adsComment));
+                                                @RequestBody AdsComment adsComment,
+                                                Authentication authentication) {
+        return ResponseEntity.ok(adsService.updateAdsComment(adsId, commentId, adsComment, authentication));
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")

@@ -85,16 +85,9 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public void deleteComment(Long adsId, Long commentId, Authentication authentication) {
 
-        Long userIdFromComments = commentRepository.getUserProfileId(adsId, commentId);
-        Long userIdFromUserProfiles = userProfileRepository.getUserProfileId(authentication.getName());
-
-        if (userIdFromComments == userIdFromUserProfiles ||
-            authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
-            commentRepository.deleteByAdsIdAndId(adsId, commentId);
-            logger.info("Comment delete successful");
-            return;
-        }
-        throw new AccessDeniedException();
+        checkUserAccess(adsId, commentId, authentication);
+        commentRepository.deleteByAdsIdAndId(adsId, commentId);
+        logger.info("Comment delete successful");
     }
 
     @Override
@@ -106,7 +99,7 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdsComment updateAdsComment(Long adsId, Long commentId, AdsComment adsComment) {
+    public AdsComment updateAdsComment(Long adsId, Long commentId, AdsComment adsComment, Authentication authentication) {
 
         Comment oldComment = commentRepository.getByAdsIdAndId(adsId, commentId).get();
         if (oldComment != null) {
@@ -168,5 +161,17 @@ public class AdsServiceImpl implements AdsService {
         fullAds.setAuthorLastName(user.getLastName());
         fullAds.setPhone(user.getPhone());
         return fullAds;
+    }
+
+    private void checkUserAccess(Long adsId, Long commentId, Authentication authentication) {
+
+        Long userIdFromComments = commentRepository.getUserProfileId(adsId, commentId);
+        Long userIdFromUserProfiles = userProfileRepository.getUserProfileId(authentication.getName());
+
+        Boolean noAdminRoots = authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")) == false;
+
+        if (userIdFromComments != userIdFromUserProfiles && noAdminRoots) {
+            throw new AccessDeniedException();
+        }
     }
 }
