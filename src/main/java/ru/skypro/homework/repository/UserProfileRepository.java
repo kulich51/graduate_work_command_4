@@ -5,4 +5,5 @@ import ru.skypro.homework.entity.UserProfile;
 
 public interface UserProfileRepository extends JpaRepository<UserProfile, Long> {
 
+    UserProfile findByEmail(String email);
 }

@@ -36,6 +36,7 @@ public class UserServiceImpl implements UserService {
 
         checkEmailNotNull(user);
         UserProfile userProfile = UserMapper.INSTANCE.UserToUserProfile(user);
+        userProfile.setId(getUserProfileId(userProfile.getEmail()));
         return UserMapper
                 .INSTANCE
                 .userProfileToUser(userProfileRepository.save(userProfile));
@@ -61,5 +62,14 @@ public class UserServiceImpl implements UserService {
         if (user.getEmail() == null) {
             throw new NullEmailException();
         }
+    }
+
+    private Long getUserProfileId(String email) {
+
+        UserProfile user = userProfileRepository.findByEmail(email);
+        if (user == null) {
+            return null;
+        }
+        return user.getId();
     }
 }

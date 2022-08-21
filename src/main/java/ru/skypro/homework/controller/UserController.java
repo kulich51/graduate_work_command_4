@@ -2,8 +2,11 @@ package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.ResponseWrapper;
@@ -19,6 +22,8 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class UserController {
 
+    private static Logger logger = LoggerFactory.getLogger(UserController.class);
+
     private final UserService userService;
 
     @GetMapping("me")
@@ -29,8 +34,10 @@ public class UserController {
     }
 
     @PatchMapping("me")
-    ResponseEntity<User> updateUser(@RequestBody User user) {
+    ResponseEntity<User> updateUser(@RequestBody User user, Authentication authentication) {
 
+        user.setEmail(authentication.getName());
+        logger.info("Update user: ".concat(user.toString()));
         return ResponseEntity.ok(userService.update(user));
     }
 
