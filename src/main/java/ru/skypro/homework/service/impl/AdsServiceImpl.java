@@ -1,6 +1,9 @@
 package ru.skypro.homework.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.controller.UserController;
 import ru.skypro.homework.dto.AdsComment;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateAds;
@@ -21,6 +24,8 @@ import java.util.stream.Collectors;
 @Service
 public class AdsServiceImpl implements AdsService {
 
+    private static Logger logger = LoggerFactory.getLogger(UserController.class);
+
     private final CommentRepository commentRepository;
     private final AdsRepository adsRepository;
 
@@ -32,7 +37,9 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public Collection<AdsDto> getAds(String title) {
 
-        Collection<Ads> ads = adsRepository.findByTitleContainsOrderByTitle(title);
+//        Collection<Ads> ads = adsRepository.findByTitleContainsOrderByTitle(title);
+        Collection<Ads> ads = adsRepository.findAll();
+        logger.info(ads.toString());
         return ads.stream()
                 .map(AdsMapper.INSTANCE::adsToAdsDto)
                 .collect(Collectors.toSet());

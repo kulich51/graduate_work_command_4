@@ -2,6 +2,8 @@ package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,14 +17,17 @@ import ru.skypro.homework.service.AdsService;
 @RequiredArgsConstructor
 public class AdsController {
 
+    private static Logger logger = LoggerFactory.getLogger(UserController.class);
+
     private final AdsService adsService;
 
     @GetMapping
     ResponseEntity<ResponseWrapper<AdsDto>> getAllAds(@RequestParam(required = false) String title) {
 //        Заглушка
-//       ResponseWrapper<AdsDto> ads = new ResponseWrapper<>(adsService.getAds(title));
-//       return ResponseEntity.ok(ads);
-       return ResponseEntity.ok().build();
+       ResponseWrapper<AdsDto> ads = new ResponseWrapper<>(adsService.getAds(title));
+       logger.info(ads.toString());
+       return ResponseEntity.ok(ads);
+//       return ResponseEntity.ok().build();
     }
 
     @PostMapping

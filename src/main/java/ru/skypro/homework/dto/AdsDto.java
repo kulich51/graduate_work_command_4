@@ -10,4 +10,5 @@ public class AdsDto {
     private final String title;
     private final String image;
     private final int price;
+    private String description;
 }

@@ -1,13 +1,10 @@
 package ru.skypro.homework.entity;
 
-import lombok.Data;
-
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Table(name = "users_profiles")
-@Data
 public class UserProfile {
 
     @Id
@@ -29,4 +26,83 @@ public class UserProfile {
 
     @OneToMany(mappedBy="author")
     private Set<Ads> ads;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Set<Ads> getAds() {
+        return ads;
+    }
+
+    public void setAds(Set<Ads> ads) {
+        this.ads = ads;
+    }
+
+    @Override
+    public String toString() {
+        return "UserProfile{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phone='" + phone + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserProfile that = (UserProfile) o;
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (!email.equals(that.email)) return false;
+        if (!firstName.equals(that.firstName)) return false;
+        if (!lastName.equals(that.lastName)) return false;
+        if (!phone.equals(that.phone)) return false;
+        return ads != null ? ads.equals(that.ads) : that.ads == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }
