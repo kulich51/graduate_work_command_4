@@ -17,17 +17,12 @@ import ru.skypro.homework.service.AdsService;
 @RequiredArgsConstructor
 public class AdsController {
 
-    private static Logger logger = LoggerFactory.getLogger(UserController.class);
-
     private final AdsService adsService;
 
     @GetMapping
     ResponseEntity<ResponseWrapper<AdsDto>> getAllAds(@RequestParam(required = false) String title) {
-//        Заглушка
        ResponseWrapper<AdsDto> ads = new ResponseWrapper<>(adsService.getAds(title));
-       logger.info(ads.toString());
        return ResponseEntity.ok(ads);
-//       return ResponseEntity.ok().build();
     }
 
     @PostMapping

@@ -37,12 +37,19 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public Collection<AdsDto> getAds(String title) {
 
-//        Collection<Ads> ads = adsRepository.findByTitleContainsOrderByTitle(title);
-        Collection<Ads> ads = adsRepository.findAll();
-        logger.info(ads.toString());
+        title = checkNullTitle(title);
+        Collection<Ads> ads = adsRepository.findByTitleContainsOrderByTitle(title);
+        logger.info("AdsServiceImpl.getAds: ".concat(ads.toString()));
         return ads.stream()
                 .map(AdsMapper.INSTANCE::adsToAdsDto)
                 .collect(Collectors.toSet());
+    }
+
+    private String checkNullTitle(String title) {
+        if (title == null) {
+            return "";
+        }
+        return title;
     }
 
     @Override
