@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.NewPassword;
@@ -33,6 +34,7 @@ public class UserController {
         return ResponseEntity.ok(new ResponseWrapper<User>(users));
     }
 
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @PatchMapping("me")
     ResponseEntity<User> updateUser(@RequestBody User user, Authentication authentication) {
 
@@ -41,6 +43,7 @@ public class UserController {
         return ResponseEntity.ok(userService.update(user));
     }
 
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @PostMapping("set_password")
     ResponseEntity<NewPassword> changePassword(@RequestBody NewPassword newPassword) {
 
@@ -51,6 +54,7 @@ public class UserController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @GetMapping("{id}")
     ResponseEntity<User> getUserById(@PathVariable Long id) {
 
