@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AdsService;
@@ -58,15 +59,16 @@ public class AdsController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @DeleteMapping("/ads/{ad_pk}/comment/{id}")
+    @DeleteMapping("/{ad_pk}/comment/{id}")
     ResponseEntity<?> deleteAdsComment(@PathVariable(value = "ad_pk") Long adsId,
-                                       @PathVariable(value = "id") Long commentId) {
-        adsService.deleteComment(adsId, commentId);
+                                       @PathVariable(value = "id") Long commentId,
+                                       Authentication authentication) {
+        adsService.deleteComment(adsId, commentId, authentication);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @GetMapping("/ads/{ad_pk}/comment/{id}")
+    @GetMapping("/{ad_pk}/comment/{id}")
     ResponseEntity<AdsComment> getAdsComment(@PathVariable(value = "ad_pk") Long adsId,
                                              @PathVariable(value = "id") Long commentId) {
 
@@ -74,33 +76,35 @@ public class AdsController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @PatchMapping("/ads/{ad_pk}/comment/{id}")
+    @PatchMapping("/{ad_pk}/comment/{id}")
     ResponseEntity<AdsComment> updateAdsComment(@PathVariable(value = "ad_pk") Long adsId,
                                                 @PathVariable(value = "id") Long commentId,
-                                                @RequestBody AdsComment adsComment) {
-        return ResponseEntity.ok(adsService.updateAdsComment(adsId, commentId, adsComment));
+                                                @RequestBody AdsComment adsComment,
+                                                Authentication authentication) {
+        return ResponseEntity.ok(adsService.updateAdsComment(adsId, commentId, adsComment, authentication));
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @DeleteMapping("/ads/{id}")
-    ResponseEntity<?> removeAds(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    ResponseEntity<?> removeAds(@PathVariable Long id, Authentication authentication) {
 
-        adsService.removeAds(id);
+        adsService.removeAds(id, authentication);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @GetMapping("/ads/{id}")
+    @GetMapping("/{id}")
     ResponseEntity<FullAdsDto> getFullAds(@PathVariable Long id) {
 
         return ResponseEntity.ok(adsService.getFullAds(id));
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @PatchMapping("/ads/{id}")
+    @PatchMapping("/{id}")
     ResponseEntity<AdsDto> updateAds(@PathVariable Long id,
-                                     @RequestBody AdsDto updatedAds) {
+                                     @RequestBody AdsDto updatedAds,
+                                     Authentication authentication) {
         updatedAds.setPk(id);
-        return ResponseEntity.ok(adsService.updateAds(updatedAds));
+        return ResponseEntity.ok(adsService.updateAds(updatedAds, authentication));
     }
 }
