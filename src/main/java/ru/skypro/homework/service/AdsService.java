@@ -1,5 +1,6 @@
 package ru.skypro.homework.service;
 
+import org.springframework.security.core.Authentication;
 import ru.skypro.homework.dto.*;
 
 import java.util.Collection;
@@ -11,7 +12,7 @@ public interface AdsService {
     Collection<AdsComment> getAdsComments(Long adsId);
     AdsComment addComment(Long adsId, AdsComment adsComment);
     AdsComment getAdsComment(Long adsId, Long commentId);
-    void deleteComment(Long adsId, Long commentId);
+    void deleteComment(Long adsId, Long commentId, Authentication authentication);
     AdsComment updateAdsComment(Long adsId, Long commentId, AdsComment comment);
     void removeAds(Long adsId);
     FullAdsDto getFullAds(Long adsId);
