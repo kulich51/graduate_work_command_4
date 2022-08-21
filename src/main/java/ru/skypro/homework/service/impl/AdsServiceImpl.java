@@ -1,7 +1,10 @@
 package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.*;
+import ru.skypro.homework.dto.AdsComment;
+import ru.skypro.homework.dto.AdsDto;
+import ru.skypro.homework.dto.CreateAds;
+import ru.skypro.homework.dto.FullAdsDto;
 import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.Comment;
 import ru.skypro.homework.entity.UserProfile;
@@ -10,7 +13,6 @@ import ru.skypro.homework.mapper.AdsMapper;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
-import ru.skypro.homework.repository.UserProfileRepository;
 import ru.skypro.homework.service.AdsService;
 
 import java.util.Collection;
@@ -21,12 +23,10 @@ public class AdsServiceImpl implements AdsService {
 
     private final CommentRepository commentRepository;
     private final AdsRepository adsRepository;
-    private final UserProfileRepository userProfileRepository;
 
-    public AdsServiceImpl(CommentRepository commentRepository, AdsRepository adsRepository, UserProfileRepository userProfileRepository) {
+    public AdsServiceImpl(CommentRepository commentRepository, AdsRepository adsRepository) {
         this.commentRepository = commentRepository;
         this.adsRepository = adsRepository;
-        this.userProfileRepository = userProfileRepository;
     }
 
     @Override
