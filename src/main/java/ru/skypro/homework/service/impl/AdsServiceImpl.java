@@ -89,8 +89,10 @@ public class AdsServiceImpl implements AdsService {
         Long userIdFromUserProfiles = userProfileRepository.getUserProfileId(authentication.getName());
 
         if (userIdFromComments == userIdFromUserProfiles ||
-            authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"))) {
+            authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
             commentRepository.deleteByAdsIdAndId(adsId, commentId);
+            logger.info("Comment delete successful");
+            return;
         }
         throw new AccessDeniedException();
     }
