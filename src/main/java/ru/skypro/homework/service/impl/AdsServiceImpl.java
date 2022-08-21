@@ -85,7 +85,7 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public void deleteComment(Long adsId, Long commentId, Authentication authentication) {
 
-        checkUserAccess(adsId, commentId, authentication);
+        checkCommentAccess(adsId, commentId, authentication);
         commentRepository.deleteByAdsIdAndId(adsId, commentId);
         logger.info("Comment delete successful");
     }
@@ -104,7 +104,7 @@ public class AdsServiceImpl implements AdsService {
         Comment oldComment = commentRepository.getByAdsIdAndId(adsId, commentId).get();
         if (oldComment != null) {
 
-            checkUserAccess(adsId, commentId, authentication);
+            checkCommentAccess(adsId, commentId, authentication);
             Comment newComment = CommentMapper.INSTANCE.adsCommentToComment(adsComment);
             newComment.setId(commentId);
             newComment.setAdsId(adsId);
@@ -114,10 +114,12 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public void removeAds(Long adsId) {
+    public void removeAds(Long adsId, Authentication authentication) {
 
+        checkAdsAccess(adsId, authentication);
         commentRepository.deleteAllByAdsId(adsId);
         adsRepository.deleteAllById(adsId);
+        logger.info("Ads delete successful");
     }
 
     @Override
@@ -165,14 +167,27 @@ public class AdsServiceImpl implements AdsService {
         return fullAds;
     }
 
-    private void checkUserAccess(Long adsId, Long commentId, Authentication authentication) {
+    private void checkCommentAccess(Long adsId, Long commentId, Authentication authentication) {
 
         Long userIdFromComments = commentRepository.getUserProfileId(adsId, commentId);
         Long userIdFromUserProfiles = userProfileRepository.getUserProfileId(authentication.getName());
+        boolean isNotEqualsId = userIdFromComments != userIdFromUserProfiles;
+        checkAccess(isNotEqualsId, authentication);
+    }
+
+    private void checkAdsAccess(Long adsId, Authentication authentication) {
+
+        Long userIdFromAds = adsRepository.getUserProfileId(adsId);
+        Long userIdFromUserProfiles = userProfileRepository.getUserProfileId(authentication.getName());
+        boolean isNotEqualsId = userIdFromAds != userIdFromUserProfiles;
+        checkAccess(isNotEqualsId, authentication);
+    }
+
+    private void checkAccess(boolean isNotEqualsId, Authentication authentication) {
 
         Boolean noAdminRoots = authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")) == false;
 
-        if (userIdFromComments != userIdFromUserProfiles && noAdminRoots) {
+        if (isNotEqualsId && noAdminRoots) {
             throw new AccessDeniedException();
         }
     }

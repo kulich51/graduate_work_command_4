@@ -86,9 +86,9 @@ public class AdsController {
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
-    ResponseEntity<?> removeAds(@PathVariable Long id) {
+    ResponseEntity<?> removeAds(@PathVariable Long id, Authentication authentication) {
 
-        adsService.removeAds(id);
+        adsService.removeAds(id, authentication);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
