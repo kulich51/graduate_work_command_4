@@ -28,10 +28,9 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("me")
-    ResponseEntity<ResponseWrapper<User>> getAllUsers() {
+    ResponseEntity<User> getUser(Authentication authentication) {
 
-        Collection<User> users = userService.getAll();
-        return ResponseEntity.ok(new ResponseWrapper<User>(users));
+        return ResponseEntity.ok(userService.getUser(authentication.getName()));
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")

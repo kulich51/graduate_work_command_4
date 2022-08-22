@@ -1,6 +1,9 @@
 package ru.skypro.homework.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.controller.UserController;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.entity.UserProfile;
@@ -10,11 +13,10 @@ import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserProfileRepository;
 import ru.skypro.homework.service.UserService;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
-
 @Service
 public class UserServiceImpl implements UserService {
+
+    private static Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private final UserProfileRepository userProfileRepository;
 
@@ -23,12 +25,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Collection<User> getAll() {
+    public User getUser(String email) {
 
-        Collection<UserProfile> userProfiles = userProfileRepository.findAll();
-        return userProfiles.stream()
-                .map(UserMapper.INSTANCE::userProfileToUser)
-                .collect(Collectors.toSet());
+        UserProfile user = userProfileRepository.findByEmail(email);
+        logger.info(user.toString());
+        return UserMapper
+                .INSTANCE
+                .userProfileToUser(user);
     }
 
     @Override

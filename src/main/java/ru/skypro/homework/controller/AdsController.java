@@ -23,8 +23,9 @@ public class AdsController {
 
     @GetMapping
     ResponseEntity<ResponseWrapper<AdsDto>> getAllAds(@RequestParam(required = false) String title) {
-        ResponseWrapper<AdsDto> ads = new ResponseWrapper<>(adsService.getAds(title));
-        return ResponseEntity.ok(ads);
+//        ResponseWrapper<AdsDto> ads = new ResponseWrapper<>(adsService.getAds(title));
+//        return ResponseEntity.ok(ads);
+        return ResponseEntity.ok().build();
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
