@@ -62,3 +62,19 @@ alter table comments add constraint fk_ads_user_profiles foreign key (user_profi
 
 --changeset kulich51:ads_create_description_column
 alter table ads add column description text;
+
+--changeset kulich51:image_table
+create table image
+(
+    id serial primary key,
+    data bytea
+);
+
+--changeset kulich51:ads_add_image
+alter table ads drop column image;
+alter table ads add column image_id bigint;
+alter table ads add constraint fk_ads_image foreign key (image_id) references image(id);
+
+--changeset kulich51:image_table_change
+alter table image add column media_type text;
+alter table image add column file_size bigint;
