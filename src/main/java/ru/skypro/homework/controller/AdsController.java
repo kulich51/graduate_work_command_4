@@ -2,8 +2,6 @@ package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,15 +28,15 @@ public class AdsController {
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @PostMapping
-    ResponseEntity<AdsDto> createAds(@RequestBody CreateAds ads) {
+    ResponseEntity<AdsDto> createAds(@RequestBody CreateAds ads, Authentication authentication) {
 
-        return ResponseEntity.ok(adsService.save(ads));
+        return ResponseEntity.ok(adsService.save(ads, authentication.getName()));
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @GetMapping("me")
-    ResponseEntity<ResponseWrapper<AdsDto>> getAdsMe(@RequestParam(required = false) String title) {
-        ResponseWrapper<AdsDto> ads = new ResponseWrapper<>(adsService.getAds(title));
+    ResponseEntity<ResponseWrapper<AdsDto>> getAdsMe(Authentication authentication) {
+        ResponseWrapper<AdsDto> ads = new ResponseWrapper<>(adsService.getAdsByUser(authentication.getName()));
         return ResponseEntity.ok(ads);
     }
 

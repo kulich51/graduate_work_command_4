@@ -45,7 +45,6 @@ public class AdsServiceImpl implements AdsService {
 
         title = checkNullTitle(title);
         Collection<Ads> ads = adsRepository.findByTitleContainsOrderByTitle(title);
-        logger.info("AdsServiceImpl.getAds: ".concat(ads.toString()));
         return ads.stream()
                 .map(AdsMapper.INSTANCE::adsToAdsDto)
                 .collect(Collectors.toSet());
@@ -59,10 +58,24 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdsDto save(CreateAds ads) {
+    public Collection<AdsDto> getAdsByUser(String email) {
 
-        Ads newAds = adsRepository.save(AdsMapper.INSTANCE.createAdsToAds(ads));
-        return AdsMapper.INSTANCE.adsToAdsDto(newAds);
+        Long authorId = userProfileRepository.getUserProfileId(email);
+        Collection<Ads> ads = adsRepository.findByAuthorId(authorId);
+        return ads.stream()
+                .map(AdsMapper.INSTANCE::adsToAdsDto)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public AdsDto save(CreateAds ads, String email) {
+
+        Ads newAds = AdsMapper.INSTANCE.createAdsToAds(ads);
+        newAds.setAuthor(userProfileRepository.findByEmail(email));
+        logger.info("Save ads: " + newAds);
+        return AdsMapper
+                .INSTANCE
+                .adsToAdsDto(adsRepository.save(newAds));
     }
 
 
@@ -88,7 +101,6 @@ public class AdsServiceImpl implements AdsService {
 
         checkCommentAccess(adsId, commentId, authentication);
         commentRepository.deleteByAdsIdAndId(adsId, commentId);
-        logger.info("Comment delete successful");
     }
 
     @Override
@@ -120,7 +132,6 @@ public class AdsServiceImpl implements AdsService {
         checkAdsAccess(adsId, authentication);
         commentRepository.deleteAllByAdsId(adsId);
         adsRepository.deleteAllById(adsId);
-        logger.info("Ads delete successful");
     }
 
     @Override

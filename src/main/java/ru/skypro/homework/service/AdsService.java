@@ -8,7 +8,7 @@ import java.util.Collection;
 public interface AdsService {
 
     Collection<AdsDto> getAds(String title);
-    AdsDto save(CreateAds ads);
+    AdsDto save(CreateAds ads, String email);
     Collection<AdsComment> getAdsComments(Long adsId);
     AdsComment addComment(Long adsId, AdsComment adsComment);
     AdsComment getAdsComment(Long adsId, Long commentId);
@@ -17,4 +17,5 @@ public interface AdsService {
     void removeAds(Long adsId, Authentication authentication);
     FullAdsDto getFullAds(Long adsId);
     AdsDto updateAds(AdsDto updatedAds, Authentication authentication);
+    Collection<AdsDto> getAdsByUser(String email);
 }

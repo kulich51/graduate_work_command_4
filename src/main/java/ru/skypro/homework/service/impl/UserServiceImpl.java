@@ -1,9 +1,6 @@
 package ru.skypro.homework.service.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.controller.UserController;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.entity.UserProfile;
@@ -16,8 +13,6 @@ import ru.skypro.homework.service.UserService;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private static Logger logger = LoggerFactory.getLogger(UserController.class);
-
     private final UserProfileRepository userProfileRepository;
 
     public UserServiceImpl(UserProfileRepository userProfileRepository) {
@@ -28,7 +23,6 @@ public class UserServiceImpl implements UserService {
     public User getUser(String email) {
 
         UserProfile user = userProfileRepository.findByEmail(email);
-        logger.info(user.toString());
         return UserMapper
                 .INSTANCE
                 .userProfileToUser(user);
