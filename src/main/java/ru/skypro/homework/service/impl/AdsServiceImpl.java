@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.controller.UserController;
 import ru.skypro.homework.dto.AdsComment;
 import ru.skypro.homework.dto.AdsDto;
@@ -11,6 +12,7 @@ import ru.skypro.homework.dto.CreateAds;
 import ru.skypro.homework.dto.FullAdsDto;
 import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.Comment;
+import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.entity.UserProfile;
 import ru.skypro.homework.exception.AccessDeniedException;
 import ru.skypro.homework.exception.AdsNotFoundException;
@@ -19,9 +21,11 @@ import ru.skypro.homework.mapper.AdsMapper;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
+import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserProfileRepository;
 import ru.skypro.homework.service.AdsService;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -33,11 +37,13 @@ public class AdsServiceImpl implements AdsService {
     private final CommentRepository commentRepository;
     private final AdsRepository adsRepository;
     private final UserProfileRepository userProfileRepository;
+    private final ImageRepository imageRepository;
 
-    public AdsServiceImpl(CommentRepository commentRepository, AdsRepository adsRepository, UserProfileRepository userProfileRepository) {
+    public AdsServiceImpl(CommentRepository commentRepository, AdsRepository adsRepository, UserProfileRepository userProfileRepository, ImageRepository imageRepository) {
         this.commentRepository = commentRepository;
         this.adsRepository = adsRepository;
         this.userProfileRepository = userProfileRepository;
+        this.imageRepository = imageRepository;
     }
 
     @Override
@@ -68,14 +74,30 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdsDto save(CreateAds ads, String email) {
+    public AdsDto save(CreateAds ads, String email, MultipartFile photo) {
+
+        Image savedImage = saveImage(photo);
 
         Ads newAds = AdsMapper.INSTANCE.createAdsToAds(ads);
         newAds.setAuthor(userProfileRepository.findByEmail(email));
+        newAds.setImage(savedImage);
         logger.info("Save ads: " + newAds);
         return AdsMapper
                 .INSTANCE
                 .adsToAdsDto(adsRepository.save(newAds));
+    }
+
+    private Image saveImage(MultipartFile photo) {
+        Image image = new Image();
+        try {
+            image.setData(photo.getBytes());
+            image.setFileSize(photo.getBytes().length);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        image.setMediaType(photo.getContentType());
+        logger.info("Photo have been saved");
+        return imageRepository.save(image);
     }
 
 

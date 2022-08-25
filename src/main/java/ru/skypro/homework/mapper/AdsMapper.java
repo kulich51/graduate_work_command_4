@@ -5,9 +5,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateAds;
-import ru.skypro.homework.dto.FullAdsDto;
 import ru.skypro.homework.entity.Ads;
-import ru.skypro.homework.entity.FullAds;
 
 @Mapper
 public interface AdsMapper {

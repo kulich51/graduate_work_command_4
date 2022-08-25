@@ -3,10 +3,12 @@ package ru.skypro.homework.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AdsService;
 
@@ -27,10 +29,11 @@ public class AdsController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @PostMapping
-    ResponseEntity<AdsDto> createAds(@RequestBody CreateAds ads, Authentication authentication) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    ResponseEntity<AdsDto> createAds(@RequestBody CreateAds ads, Authentication authentication,
+                                     @RequestParam MultipartFile photo) {
 
-        return ResponseEntity.ok(adsService.save(ads, authentication.getName()));
+        return ResponseEntity.ok(adsService.save(ads, authentication.getName(), photo));
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
