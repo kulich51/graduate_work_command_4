@@ -17,26 +17,27 @@ public class Ads {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "image")
-    private String image;
-
     @Column(name = "price")
     private int price;
 
     @Column(name = "description")
     private String description;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id", referencedColumnName = "id")
+    private Image image;
+
     public Ads() {
 
     }
 
-    public Ads(Long id, UserProfile author, String title, String image, int price, String description) {
+    public Ads(Long id, UserProfile author, String title, int price, String description, Image image) {
         this.id = id;
         this.author = author;
         this.title = title;
-        this.image = image;
         this.price = price;
         this.description = description;
+        this.image = image;
     }
 
     public Long getId() {
@@ -63,14 +64,6 @@ public class Ads {
         this.title = title;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
     public int getPrice() {
         return price;
     }
@@ -87,15 +80,23 @@ public class Ads {
         this.description = description;
     }
 
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
     @Override
     public String toString() {
         return "Ads{" +
                 "id=" + id +
                 ", author=" + author +
                 ", title='" + title + '\'' +
-                ", image='" + image + '\'' +
                 ", price=" + price +
                 ", description='" + description + '\'' +
+                ", image=" + image +
                 '}';
     }
 
@@ -110,12 +111,18 @@ public class Ads {
         if (!id.equals(ads.id)) return false;
         if (!author.equals(ads.author)) return false;
         if (!title.equals(ads.title)) return false;
-        if (!image.equals(ads.image)) return false;
-        return description.equals(ads.description);
+        if (description != null ? !description.equals(ads.description) : ads.description != null) return false;
+        return image.equals(ads.image);
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        int result = id.hashCode();
+        result = 31 * result + author.hashCode();
+        result = 31 * result + title.hashCode();
+        result = 31 * result + price;
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + image.hashCode();
+        return result;
     }
 }

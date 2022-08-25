@@ -21,6 +21,9 @@ public class Image {
     public Image() {
     }
 
+    @OneToOne(mappedBy = "ads")
+    private Ads ads;
+
     public Image(Long id, long fileSize, String mediaType, byte[] data) {
         this.id = id;
         this.fileSize = fileSize;
