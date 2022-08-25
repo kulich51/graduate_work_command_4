@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class FullAdsDto {
 
-    private String image;
+    private byte[] image;
     private String authorLastName;
     private String authorFirstName;
     private String phone;

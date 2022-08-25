@@ -21,7 +21,7 @@ public class Image {
     public Image() {
     }
 
-    @OneToOne(mappedBy = "ads")
+    @OneToOne(mappedBy = "image")
     private Ads ads;
 
     public Image(Long id, long fileSize, String mediaType, byte[] data) {

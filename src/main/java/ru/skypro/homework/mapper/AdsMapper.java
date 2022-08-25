@@ -18,11 +18,10 @@ public interface AdsMapper {
     Ads createAdsToAds(CreateAds ads);
 
     @Mapping(source = "id", target = "pk")
+    @Mapping(source = "ads.image.data", target = "image")
     AdsDto adsToAdsDto(Ads ads);
 
-    @Mapping(source = "id", target = "pk")
-    FullAdsDto fullAdsToFullAdsDto(FullAds fullAds);
-
     @Mapping(source = "pk", target = "id")
+    @Mapping(source = "image", target = "image.data")
     Ads adsDtoToAds(AdsDto ads);
 }

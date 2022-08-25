@@ -8,7 +8,7 @@ public class AdsDto {
     private Long pk;
     private final User author;
     private final String title;
-    private final String image;
+    private final byte[] image;
     private final int price;
     private String description;
 }

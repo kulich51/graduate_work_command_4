@@ -173,7 +173,7 @@ public class AdsServiceImpl implements AdsService {
         FullAdsDto fullAds = new FullAdsDto();
         fullAds.setPk(ads.getId());
         fullAds.setTitle(ads.getTitle());
-        fullAds.setImage(ads.getImage());
+        fullAds.setImage(ads.getImage().getData());
         fullAds.setPrice(ads.getPrice());
         fullAds.setDescription(ads.getDescription());
         fullAds.setEmail(user.getEmail());
