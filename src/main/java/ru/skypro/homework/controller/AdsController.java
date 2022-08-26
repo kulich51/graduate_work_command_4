@@ -29,11 +29,11 @@ public class AdsController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    ResponseEntity<AdsDto> createAds(@RequestBody CreateAds ads, Authentication authentication,
-                                     @RequestParam MultipartFile photo) {
+    @PostMapping()
+    ResponseEntity<AdsDto> createAds(@ModelAttribute CreateAds ads, Authentication authentication) {
 
-        return ResponseEntity.ok(adsService.save(ads, authentication.getName(), photo));
+        System.out.println("createAds");
+        return ResponseEntity.ok(adsService.save(ads, authentication.getName()));
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")

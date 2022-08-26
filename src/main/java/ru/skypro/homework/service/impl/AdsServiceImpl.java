@@ -74,9 +74,9 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdsDto save(CreateAds ads, String email, MultipartFile photo) {
+    public AdsDto save(CreateAds ads, String email) {
 
-        Image savedImage = saveImage(photo);
+        Image savedImage = saveImage(ads.getImage());
 
         Ads newAds = AdsMapper.INSTANCE.createAdsToAds(ads);
         newAds.setAuthor(userProfileRepository.findByEmail(email));
