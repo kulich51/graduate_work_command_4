@@ -24,14 +24,12 @@ import javax.validation.constraints.NotNull;
 @RequiredArgsConstructor
 public class AdsController {
 
-
     private final AdsService adsService;
 
     @GetMapping
     ResponseEntity<ResponseWrapper<AdsDto>> getAllAds(@RequestParam(required = false) String title) {
-//        ResponseWrapper<AdsDto> ads = new ResponseWrapper<>(adsService.getAds(title));
-//        return ResponseEntity.ok(ads);
-        return ResponseEntity.ok().build();
+        ResponseWrapper<AdsDto> ads = new ResponseWrapper<>(adsService.getAds(title));
+        return ResponseEntity.ok(ads);
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
