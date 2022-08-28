@@ -48,7 +48,7 @@ public class AdsController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @GetMapping("{ad_pk}/comment")
+    @GetMapping("{ad_pk}/comments")
     ResponseEntity<ResponseWrapper<AdsComment>> getAdsComments(@PathVariable(value = "ad_pk") Long adsId) {
 
         ResponseWrapper<AdsComment> ads = new ResponseWrapper<>(adsService.getAdsComments(adsId));
@@ -56,7 +56,7 @@ public class AdsController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @PostMapping("/{ad_pk}/comment")
+    @PostMapping("/{ad_pk}/comments")
     ResponseEntity<AdsComment> addAdsComment(@PathVariable(value = "ad_pk") Long adsId,
                                              @RequestBody AdsComment comment) {
 
@@ -65,7 +65,7 @@ public class AdsController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @DeleteMapping("/{ad_pk}/comment/{id}")
+    @DeleteMapping("/{ad_pk}/comments/{id}")
     ResponseEntity<?> deleteAdsComment(@PathVariable(value = "ad_pk") Long adsId,
                                        @PathVariable(value = "id") Long commentId,
                                        Authentication authentication) {
@@ -74,7 +74,7 @@ public class AdsController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @GetMapping("/{ad_pk}/comment/{id}")
+    @GetMapping("/{ad_pk}/comments/{id}")
     ResponseEntity<AdsComment> getAdsComment(@PathVariable(value = "ad_pk") Long adsId,
                                              @PathVariable(value = "id") Long commentId) {
 
@@ -82,7 +82,7 @@ public class AdsController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @PatchMapping("/{ad_pk}/comment/{id}")
+    @PatchMapping("/{ad_pk}/comments/{id}")
     ResponseEntity<AdsComment> updateAdsComment(@PathVariable(value = "ad_pk") Long adsId,
                                                 @PathVariable(value = "id") Long commentId,
                                                 @RequestBody AdsComment adsComment,
