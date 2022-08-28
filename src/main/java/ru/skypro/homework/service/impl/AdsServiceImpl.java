@@ -27,6 +27,7 @@ import ru.skypro.homework.repository.UserProfileRepository;
 import ru.skypro.homework.service.AdsService;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -109,9 +110,16 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdsComment addComment(Long adsId, AdsComment adsComment) {
+    public AdsComment addComment(Long adsId, AdsComment adsComment, Authentication authentication) {
+
+        Long userId = userProfileRepository.getUserProfileId(authentication.getName());
+        LocalDateTime now = LocalDateTime.now();
 
         Comment comment = CommentMapper.INSTANCE.adsCommentToComment(adsComment);
+
+        comment.setAuthor(userId);
+        comment.setCreatedAt(now);
+
         commentRepository.save(comment);
         return mapToAdsComment(comment);
     }

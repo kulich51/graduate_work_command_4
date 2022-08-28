@@ -1,7 +1,7 @@
 package ru.skypro.homework.entity;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "comments")
@@ -19,7 +19,7 @@ public class Comment {
     private Long author;
 
     @Column(name = "created_at")
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "text")
     private String text;
@@ -27,7 +27,7 @@ public class Comment {
     public Comment() {
     }
 
-    public Comment(Long id, Long adsId, Long author, Date createdAt, String text) {
+    public Comment(Long id, Long adsId, Long author, LocalDateTime createdAt, String text) {
         this.id = id;
         this.adsId = adsId;
         this.author = author;
@@ -94,11 +94,11 @@ public class Comment {
         this.author = author;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 

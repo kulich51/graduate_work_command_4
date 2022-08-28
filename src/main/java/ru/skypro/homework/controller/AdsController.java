@@ -48,7 +48,7 @@ public class AdsController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @GetMapping("{ad_pk}/comments")
+    @GetMapping("/{ad_pk}/comments")
     ResponseEntity<ResponseWrapper<AdsComment>> getAdsComments(@PathVariable(value = "ad_pk") Long adsId) {
 
         ResponseWrapper<AdsComment> ads = new ResponseWrapper<>(adsService.getAdsComments(adsId));
@@ -58,10 +58,11 @@ public class AdsController {
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @PostMapping("/{ad_pk}/comments")
     ResponseEntity<AdsComment> addAdsComment(@PathVariable(value = "ad_pk") Long adsId,
-                                             @RequestBody AdsComment comment) {
+                                             @RequestBody AdsComment comment,
+                                             Authentication authentication) {
 
         comment.setPk(adsId);
-        return ResponseEntity.ok(adsService.addComment(adsId, comment));
+        return ResponseEntity.ok(adsService.addComment(adsId, comment, authentication));
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
