@@ -17,6 +17,7 @@ import ru.skypro.homework.entity.UserProfile;
 import ru.skypro.homework.exception.AccessDeniedException;
 import ru.skypro.homework.exception.AdsNotFoundException;
 import ru.skypro.homework.exception.CommentNotFoundException;
+import ru.skypro.homework.exception.ImageNotFoundException;
 import ru.skypro.homework.mapper.AdsMapper;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.repository.AdsRepository;
@@ -172,6 +173,13 @@ public class AdsServiceImpl implements AdsService {
                     .adsToAdsDto(adsRepository.save(newAds));
         }
         throw  new AdsNotFoundException();
+    }
+
+    @Override
+    public byte[] getImage(Long id) {
+
+        Image image = imageRepository.findById(id).orElseThrow(ImageNotFoundException::new);
+        return image.getData();
     }
 
     private AdsComment mapToAdsComment(Comment comment) {

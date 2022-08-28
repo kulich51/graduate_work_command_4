@@ -19,4 +19,5 @@ public interface AdsService {
     FullAdsDto getFullAds(Long adsId);
     AdsDto updateAds(AdsDto updatedAds, Authentication authentication);
     Collection<AdsDto> getAdsByUser(String email);
+    byte[] getImage(Long id);
 }
