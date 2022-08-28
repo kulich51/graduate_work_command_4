@@ -1,6 +1,7 @@
 package ru.skypro.homework.service;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 
 import java.util.Collection;
@@ -8,7 +9,7 @@ import java.util.Collection;
 public interface AdsService {
 
     Collection<AdsDto> getAds(String title);
-    AdsDto save(CreateAds ads, String email);
+    AdsDto save(CreateAds ads, String email, MultipartFile photo);
     Collection<AdsComment> getAdsComments(Long adsId);
     AdsComment addComment(Long adsId, AdsComment adsComment);
     AdsComment getAdsComment(Long adsId, Long commentId);

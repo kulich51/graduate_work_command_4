@@ -51,9 +51,8 @@ public class AdsServiceImpl implements AdsService {
 
         title = checkNullTitle(title);
         Collection<Ads> ads = adsRepository.findByTitleContainsOrderByTitle(title);
-        return ads.stream()
-                .map(AdsMapper.INSTANCE::adsToAdsDto)
-                .collect(Collectors.toSet());
+        return AdsMapper.INSTANCE.adsCollectionToAdsDto(ads);
+
     }
 
     private String checkNullTitle(String title) {
@@ -68,15 +67,14 @@ public class AdsServiceImpl implements AdsService {
 
         Long authorId = userProfileRepository.getUserProfileId(email);
         Collection<Ads> ads = adsRepository.findByAuthorId(authorId);
-        return ads.stream()
-                .map(AdsMapper.INSTANCE::adsToAdsDto)
-                .collect(Collectors.toSet());
+        return AdsMapper.INSTANCE.adsCollectionToAdsDto(ads);
     }
 
     @Override
-    public AdsDto save(CreateAds ads, String email) {
+    public AdsDto save(CreateAds ads, String email, MultipartFile photo) {
 
-        Image savedImage = saveImage(ads.getImage());
+        Image savedImage = saveImage(photo);
+        logger.info("Photo have been saved");
 
         Ads newAds = AdsMapper.INSTANCE.createAdsToAds(ads);
         newAds.setAuthor(userProfileRepository.findByEmail(email));
@@ -96,10 +94,9 @@ public class AdsServiceImpl implements AdsService {
             e.printStackTrace();
         }
         image.setMediaType(photo.getContentType());
-        logger.info("Photo have been saved");
+        logger.info("saveImage: " + image.toString());
         return imageRepository.save(image);
     }
-
 
     @Override
     public Collection<AdsComment> getAdsComments(Long adsId) {

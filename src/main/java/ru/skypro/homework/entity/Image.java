@@ -1,13 +1,16 @@
 package ru.skypro.homework.entity;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
+import java.util.Arrays;
 
 @Entity
 @Table(name = "image")
 public class Image {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     @Column(name = "file_size")
@@ -16,6 +19,8 @@ public class Image {
     private String mediaType;
 
     @Lob
+    @Column(name = "data")
+    @Type(type="org.hibernate.type.BinaryType")
     private byte[] data;
 
     public Image() {
@@ -61,5 +66,16 @@ public class Image {
 
     public void setData(byte[] data) {
         this.data = data;
+    }
+
+    @Override
+    public String toString() {
+        return "Image{" +
+                "id=" + id +
+                ", fileSize=" + fileSize +
+                ", mediaType='" + mediaType + '\'' +
+                ", data=" + Arrays.toString(data) +
+                ", ads=" + ads +
+                '}';
     }
 }
