@@ -19,7 +19,7 @@ public class ImageController {
         this.adsService = adsService;
     }
 
-    @GetMapping(value = "/{id}", produces = {MediaType.IMAGE_PNG_VALUE})
+    @GetMapping(value = "/image/{id}", produces = {MediaType.IMAGE_PNG_VALUE})
     public byte[] getAdsAvatar(@PathVariable("id") Long id) {
 
         return adsService.getImage(id);
