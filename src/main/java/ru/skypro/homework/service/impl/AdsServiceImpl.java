@@ -41,6 +41,8 @@ public class AdsServiceImpl implements AdsService {
     private final UserProfileRepository userProfileRepository;
     private final ImageRepository imageRepository;
 
+    private static String SOURCE_URL = "http://127.0.0.1:8080/";
+
     public AdsServiceImpl(CommentRepository commentRepository, AdsRepository adsRepository, UserProfileRepository userProfileRepository, ImageRepository imageRepository) {
         this.commentRepository = commentRepository;
         this.adsRepository = adsRepository;
@@ -208,7 +210,7 @@ public class AdsServiceImpl implements AdsService {
         FullAdsDto fullAds = new FullAdsDto();
         fullAds.setPk(ads.getId());
         fullAds.setTitle(ads.getTitle());
-        fullAds.setImage(ads.getImage().getId().toString());
+        fullAds.setImage(SOURCE_URL + ads.getImage().getId().toString());
         fullAds.setPrice(ads.getPrice());
         fullAds.setDescription(ads.getDescription());
         fullAds.setEmail(user.getEmail());
