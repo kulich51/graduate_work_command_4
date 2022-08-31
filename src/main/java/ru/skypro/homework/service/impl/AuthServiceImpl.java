@@ -19,11 +19,8 @@ public class AuthServiceImpl implements AuthService {
 
     private final PasswordEncoder encoder;
 
-    private final UserProfileRepository userProfileRepository;
-
-    public AuthServiceImpl(UserDetailsManager manager, UserProfileRepository userProfileRepository) {
+    public AuthServiceImpl(UserDetailsManager manager) {
         this.manager = manager;
-        this.userProfileRepository = userProfileRepository;
         this.encoder = new BCryptPasswordEncoder();
     }
 
@@ -50,12 +47,6 @@ public class AuthServiceImpl implements AuthService {
                         .roles(role.name())
                         .build()
         );
-
-// Во фронтенде ошибка. Имя, фамилия и телефон не передаются в бэкенд при регистрации
-//        UserProfile userProfile = UserMapper.INSTANCE.registerReqToUserProfile(registerReq);
-//        System.out.println(userProfile);
-//        userProfileRepository.save(userProfile);
-
         return true;
     }
 }
