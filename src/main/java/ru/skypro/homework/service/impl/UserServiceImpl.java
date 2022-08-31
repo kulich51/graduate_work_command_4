@@ -40,11 +40,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean changePassword(NewPassword newPassword) {
-        return false;
-    }
-
-    @Override
     public User getUserById(Long id) {
 
         if (userProfileRepository.existsById(id)) {

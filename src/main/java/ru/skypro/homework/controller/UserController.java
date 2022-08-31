@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.User;
+import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.UserService;
 
 @Slf4j
@@ -19,6 +20,7 @@ import ru.skypro.homework.service.UserService;
 public class UserController {
 
     private final UserService userService;
+    private final AuthService authService;
 
     @GetMapping("me")
     ResponseEntity<User> getUser(Authentication authentication) {
@@ -35,10 +37,10 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @PostMapping("set_password")
-    ResponseEntity<NewPassword> changePassword(@RequestBody NewPassword newPassword) {
+    @PatchMapping("set_password")
+    ResponseEntity<NewPassword> changePassword(@RequestBody NewPassword newPassword, Authentication authentication) {
 
-        if (userService.changePassword(newPassword)) {
+        if (authService.changePassword(newPassword, authentication.getName())) {
             return ResponseEntity.ok(newPassword);
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
