@@ -111,7 +111,6 @@ public class AdsController {
     ResponseEntity<AdsDto> updateAds(@PathVariable Long id,
                                      @RequestBody AdsDto updatedAds,
                                      Authentication authentication) {
-        updatedAds.setPk(id);
-        return ResponseEntity.ok(adsService.updateAds(updatedAds, authentication));
+        return ResponseEntity.ok(adsService.updateAds(id, updatedAds, authentication));
     }
 }
