@@ -144,14 +144,13 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public AdsComment updateAdsComment(Long adsId, Long commentId, AdsComment adsComment, Authentication authentication) {
 
-        Comment oldComment = commentRepository.getByAdsIdAndId(adsId, commentId).get();
-        if (oldComment != null) {
+        Comment comment = commentRepository.getByAdsIdAndId(adsId, commentId).get();
+        if (comment != null) {
 
             checkCommentAccess(adsId, commentId, authentication);
-            Comment newComment = CommentMapper.INSTANCE.adsCommentToComment(adsComment);
-            newComment.setId(commentId);
-            newComment.setAdsId(adsId);
-            return mapToAdsComment(commentRepository.save(newComment));
+            // У старого комментария меняется только текст. Дата создания не меняется
+            comment.setText(adsComment.getText());
+            return mapToAdsComment(commentRepository.save(comment));
         }
         throw new CommentNotFoundException();
     }
