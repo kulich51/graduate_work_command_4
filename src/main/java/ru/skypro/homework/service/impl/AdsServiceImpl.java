@@ -181,6 +181,7 @@ public class AdsServiceImpl implements AdsService {
             // С фронта при корректировке объявления передаются только поля: description, price, title
             // Остальные поля заполняются из сторой записи объявления
             Ads newAds = AdsMapper.INSTANCE.adsDtoToAds(updatedAds);
+            checkNewAdsForNullFields(oldAds, newAds);
             newAds.setId(id);
             newAds.setAuthor(oldAds.getAuthor());
             newAds.setImage(oldAds.getImage());
@@ -191,6 +192,21 @@ public class AdsServiceImpl implements AdsService {
 
         logger.info("AdsServiceImpl.updateAds: ads with id " + updatedAds.getPk() + " not found");
         throw  new AdsNotFoundException();
+    }
+
+    private void checkNewAdsForNullFields(Ads oldAds, Ads newAds) {
+
+        if (newAds.getTitle() == null) {
+            newAds.setTitle(oldAds.getTitle());
+        }
+
+        if (newAds.getDescription() == null) {
+            newAds.setDescription(oldAds.getDescription());
+        }
+
+        if (newAds.getPrice() == 0) {
+            newAds.setPrice(oldAds.getPrice());
+        }
     }
 
     @Override
