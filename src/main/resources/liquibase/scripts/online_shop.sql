@@ -76,3 +76,8 @@ create table image
 alter table ads drop column image;
 alter table ads add column image_id bigint;
 alter table ads add constraint fk_ads_image foreign key (image_id) references image(id);
+
+--changeset kulich51:user_profiles_drop_not_null
+alter table users_profiles alter column first_name drop not null,
+                           alter column last_name drop not null,
+                           alter column phone drop not null;
