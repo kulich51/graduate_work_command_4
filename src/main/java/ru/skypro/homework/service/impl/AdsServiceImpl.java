@@ -125,7 +125,6 @@ public class AdsServiceImpl implements AdsService {
             logger.info("AdsServiceImpl.saveImage: " + e.toString());
         }
         image.setMediaType(photo.getContentType());
-        logger.info("saveImage: " + image.toString());
         return imageRepository.save(image);
     }
 
@@ -247,24 +246,19 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public AdsDto updateAds(Long id, AdsDto updatedAds, Authentication authentication) {
 
-        if (adsRepository.existsById(id)) {
-            Ads oldAds = adsRepository.findById(id).get();
-            checkAdsAccess(id, authentication);
+        Ads oldAds = adsRepository.findById(id).orElseThrow(AdsNotFoundException::new);
+        checkAdsAccess(id, authentication);
 
-            // С фронта при корректировке объявления передаются только поля: description, price, title
-            // Остальные поля заполняются из сторой записи объявления
-            Ads newAds = AdsMapper.INSTANCE.adsDtoToAds(updatedAds);
-            checkNewAdsForNullFields(oldAds, newAds);
-            newAds.setId(id);
-            newAds.setAuthor(oldAds.getAuthor());
-            newAds.setImage(oldAds.getImage());
-            return AdsMapper
-                    .INSTANCE
-                    .adsToAdsDto(adsRepository.save(newAds));
-        }
-
-        logger.info("AdsServiceImpl.updateAds: ads with id " + updatedAds.getPk() + " not found");
-        throw new AdsNotFoundException();
+        // С фронта при корректировке объявления передаются только поля: description, price, title
+        // Остальные поля заполняются из сторой записи объявления
+        Ads newAds = AdsMapper.INSTANCE.adsDtoToAds(updatedAds);
+        checkNewAdsForNullFields(oldAds, newAds);
+        newAds.setId(id);
+        newAds.setAuthor(oldAds.getAuthor());
+        newAds.setImage(oldAds.getImage());
+        return AdsMapper
+                .INSTANCE
+                .adsToAdsDto(adsRepository.save(newAds));
     }
 
     /**
