@@ -29,6 +29,12 @@ public class AuthServiceImpl implements AuthService {
         this.encoder = new BCryptPasswordEncoder();
     }
 
+    /**
+     * Получить статус об авторизации пользователя
+     * @param userName логин пользователя (email)
+     * @param password пароль пользователя
+     * @return false, если пользователя не существует, либо true
+     */
     @Override
     public boolean login(String userName, String password) {
         if (!manager.userExists(userName)) {
@@ -41,6 +47,12 @@ public class AuthServiceImpl implements AuthService {
         return encoder.matches(password, encryptedPasswordWithoutEncryptionType);
     }
 
+    /**
+     * Получить статус о регистрации нового пользователя
+     * @param registerReq сущность с данными пользователя с формы регистрации
+     * @param role        роль позльзователя USER / ADMIN
+     * @return false, если пользователь существует в БД, true, если не существует в БД
+     */
     @Override
     public boolean register(RegisterReq registerReq, Role role) {
         if (manager.userExists(registerReq.getUsername())) {
@@ -60,6 +72,12 @@ public class AuthServiceImpl implements AuthService {
         return true;
     }
 
+    /**
+     * Получить стаус об изменении пароля пользователя
+     * @param newPassword объект с новым и старым паролем пользователя
+     * @param username    логин пользователя (email)
+     * @return true, если пароль изменен, либо false
+     */
     @Override
     public boolean changePassword(NewPassword newPassword, String username) {
 

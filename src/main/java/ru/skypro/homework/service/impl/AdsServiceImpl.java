@@ -57,7 +57,6 @@ public class AdsServiceImpl implements AdsService {
      */
     @Override
     public Collection<AdsDto> getAds(String title) {
-
         title = checkNullTitle(title);
         Collection<Ads> ads = adsRepository.findByTitleContainsOrderByTitle(title);
         return AdsMapper.INSTANCE.adsCollectionToAdsDto(ads);
@@ -88,6 +87,13 @@ public class AdsServiceImpl implements AdsService {
         return AdsMapper.INSTANCE.adsCollectionToAdsDto(ads);
     }
 
+    /**
+     * Сохраненить объявление с изображением в БД
+     * @param ads   объявление пользователя
+     * @param email email пользователя
+     * @param photo изображение из объявления передаваемое пользователем
+     * @return сохраненное объявление в БД
+     */
     @Override
     public AdsDto save(CreateAds ads, String email, MultipartFile photo) {
 
@@ -103,6 +109,11 @@ public class AdsServiceImpl implements AdsService {
                 .adsToAdsDto(adsRepository.save(newAds));
     }
 
+    /**
+     * Сохранить изображение в БД
+     * @param photo изображение из объявления передаваемое пользователем
+     * @return сохраненное избражение в БД
+     */
     private Image saveImage(MultipartFile photo) {
         Image image = new Image();
         try {
@@ -112,10 +123,14 @@ public class AdsServiceImpl implements AdsService {
             logger.info("AdsServiceImpl.saveImage: " + e.toString());
         }
         image.setMediaType(photo.getContentType());
-        logger.info("saveImage: " + image.toString());
         return imageRepository.save(image);
     }
 
+    /**
+     * Получить все комментарии к объявлению по id объявления в БД
+     * @param adsId id объявления
+     * @return коллекцию комментариев по переданному объявлению
+     */
     @Override
     public Collection<AdsComment> getAdsComments(Long adsId) {
 
@@ -125,6 +140,13 @@ public class AdsServiceImpl implements AdsService {
                 .collect(Collectors.toSet());
     }
 
+    /**
+     * Добавить комментарий к объявлению
+     * @param adsId          id объявления
+     * @param adsComment     комментарий к объявлению
+     * @param authentication сущность с данными по авторизированному пользователю
+     * @return сохраненный комментарий из БД
+     */
     @Override
     public AdsComment addComment(Long adsId, AdsComment adsComment, Authentication authentication) {
 
@@ -139,6 +161,12 @@ public class AdsServiceImpl implements AdsService {
         return mapToAdsComment(comment);
     }
 
+    /**
+     * Удалить комментарий
+     * @param adsId          id объявления
+     * @param commentId      id комментария
+     * @param authentication сущность с данными по авторизированному пользователю
+     */
     @Override
     public void deleteComment(Long adsId, Long commentId, Authentication authentication) {
 
@@ -146,6 +174,12 @@ public class AdsServiceImpl implements AdsService {
         commentRepository.deleteByAdsIdAndId(adsId, commentId);
     }
 
+    /**
+     * Получить комментарий к объявлению по id объявления и комментария
+     * @param adsId     id объявления
+     * @param commentId id комментария
+     * @return комментарий по заданному id объявления и комментария
+     */
     @Override
     public AdsComment getAdsComment(Long adsId, Long commentId) {
 
@@ -154,6 +188,14 @@ public class AdsServiceImpl implements AdsService {
         return mapToAdsComment(comment);
     }
 
+    /**
+     * Измененить комментарий
+     * @param adsId          id объявления
+     * @param commentId      id комментария
+     * @param adsComment     откорректированный комментарий к объявлению
+     * @param authentication сущность с данными по авторизированному пользователю
+     * @return откорректированный комментарий из БД
+     */
     @Override
     public AdsComment updateAdsComment(Long adsId, Long commentId, AdsComment adsComment, Authentication authentication) {
 
@@ -165,6 +207,11 @@ public class AdsServiceImpl implements AdsService {
         return mapToAdsComment(commentRepository.save(comment));
     }
 
+    /**
+     * Удалить объявление по id объявления в БД
+     * @param adsId          id объявления
+     * @param authentication сущность с данными по авторизированному пользователю
+     */
     @Override
     public void removeAds(Long adsId, Authentication authentication) {
 
@@ -173,6 +220,11 @@ public class AdsServiceImpl implements AdsService {
         adsRepository.deleteAllById(adsId);
     }
 
+    /**
+     * Получить полную информацию об объявлении по id объявления в БД
+     * @param adsId id объявления
+     * @return полная информация об объявлении
+     */
     @Override
     public FullAdsDto getFullAds(Long adsId) {
 
@@ -181,29 +233,37 @@ public class AdsServiceImpl implements AdsService {
         return getFullAds(ads, user);
     }
 
+    /**
+     * Измененить объявлений по id объявления в БД
+     * @param id             id объявления
+     * @param updatedAds     откорректированное объявление
+     * @param authentication сущность с данными по авторизированному пользователю
+     * @return откорректированное объявление в БД
+     * @throws AdsNotFoundException если объявление не найдено
+     */
     @Override
     public AdsDto updateAds(Long id, AdsDto updatedAds, Authentication authentication) {
 
-        if (adsRepository.existsById(id)) {
-            Ads oldAds = adsRepository.findById(id).get();
-            checkAdsAccess(id, authentication);
+        Ads oldAds = adsRepository.findById(id).orElseThrow(AdsNotFoundException::new);
+        checkAdsAccess(id, authentication);
 
-            // С фронта при корректировке объявления передаются только поля: description, price, title
-            // Остальные поля заполняются из сторой записи объявления
-            Ads newAds = AdsMapper.INSTANCE.adsDtoToAds(updatedAds);
-            checkNewAdsForNullFields(oldAds, newAds);
-            newAds.setId(id);
-            newAds.setAuthor(oldAds.getAuthor());
-            newAds.setImage(oldAds.getImage());
-            return AdsMapper
-                    .INSTANCE
-                    .adsToAdsDto(adsRepository.save(newAds));
-        }
-
-        logger.info("AdsServiceImpl.updateAds: ads with id " + updatedAds.getPk() + " not found");
-        throw  new AdsNotFoundException();
+        // С фронта при корректировке объявления передаются только поля: description, price, title
+        // Остальные поля заполняются из сторой записи объявления
+        Ads newAds = AdsMapper.INSTANCE.adsDtoToAds(updatedAds);
+        checkNewAdsForNullFields(oldAds, newAds);
+        newAds.setId(id);
+        newAds.setAuthor(oldAds.getAuthor());
+        newAds.setImage(oldAds.getImage());
+        return AdsMapper
+                .INSTANCE
+                .adsToAdsDto(adsRepository.save(newAds));
     }
 
+    /**
+     * Проверить поля объявления на null
+     * @param oldAds старое объявление
+     * @param newAds новое объявление
+     */
     private void checkNewAdsForNullFields(Ads oldAds, Ads newAds) {
 
         if (newAds.getTitle() == null) {
@@ -219,6 +279,11 @@ public class AdsServiceImpl implements AdsService {
         }
     }
 
+    /**
+     * Получить изображение
+     * @param id id объявления
+     * @return изображение по заданному объявлению
+     */
     @Override
     public byte[] getImage(Long id) {
 
@@ -239,6 +304,12 @@ public class AdsServiceImpl implements AdsService {
         }
     }
 
+    /**
+     * Получить полную информацию об объявлении
+     * @param ads  объявление
+     * @param user пользователь
+     * @return полную информацию об объявлении
+     */
     private FullAdsDto getFullAds(Ads ads, UserProfile user) {
 
         FullAdsDto fullAds = new FullAdsDto();
@@ -254,6 +325,12 @@ public class AdsServiceImpl implements AdsService {
         return fullAds;
     }
 
+    /**
+     * Проверить доступ к комментарием
+     * @param adsId          id объявления
+     * @param commentId      id комментария
+     * @param authentication сущность с данными по авторизированному пользователю
+     */
     private void checkCommentAccess(Long adsId, Long commentId, Authentication authentication) {
 
         Long userIdFromComments = commentRepository.getUserProfileId(adsId, commentId);
@@ -262,6 +339,11 @@ public class AdsServiceImpl implements AdsService {
         checkAccess(isNotEqualsId, authentication);
     }
 
+    /**
+     * Проверить доступ к объявлениям
+     * @param adsId          id объявления
+     * @param authentication сущность с данными по авторизированному пользователю
+     */
     private void checkAdsAccess(Long adsId, Authentication authentication) {
 
         Long userIdFromAds = adsRepository.getUserProfileId(adsId);
@@ -270,6 +352,12 @@ public class AdsServiceImpl implements AdsService {
         checkAccess(isNotEqualsId, authentication);
     }
 
+    /**
+     * Проверить доступ к данным в роли ADMIN
+     * @param isNotEqualsId  сравнение ID пользователя
+     * @param authentication сущность с данными по авторизированному пользователю
+     * @throws AccessDeniedException если пользователь не имеет права доступа к данным
+     */
     private void checkAccess(boolean isNotEqualsId, Authentication authentication) {
 
         Boolean noAdminRoots = authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")) == false;

@@ -6,6 +6,8 @@ import org.mapstruct.factory.Mappers;
 import ru.skypro.homework.dto.AdsComment;
 import ru.skypro.homework.entity.Comment;
 
+import java.util.Collection;
+
 @Mapper
 public interface CommentMapper {
 
