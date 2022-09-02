@@ -115,12 +115,11 @@ public class AdsServiceImpl implements AdsService {
     public AdsComment addComment(Long adsId, AdsComment adsComment, Authentication authentication) {
 
         Long userId = userProfileRepository.getUserProfileId(authentication.getName());
-        LocalDateTime now = LocalDateTime.now();
 
         Comment comment = CommentMapper.INSTANCE.adsCommentToComment(adsComment);
 
         comment.setAuthor(userId);
-        comment.setCreatedAt(now);
+        comment.setCreatedAt(LocalDateTime.now());
 
         commentRepository.save(comment);
         return mapToAdsComment(comment);
