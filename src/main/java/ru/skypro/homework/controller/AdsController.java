@@ -35,7 +35,8 @@ public class AdsController {
         return ResponseEntity.ok(ads);
     }
 
-    @Operation(tags = {"Объявления"}, summary = "Создание объявлений", description = "Возвращает создание объявлений с картинкой.")
+    @Operation(tags = {"Объявления"}, summary = "Создание объявлений",
+            description = "Создать новое объявление с картинкой")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @PostMapping()
     public ResponseEntity<AdsDto> createAds(Authentication authentication,
@@ -45,7 +46,8 @@ public class AdsController {
         return ResponseEntity.ok(adsService.save(ads, authentication.getName(), photo));
     }
 
-    @Operation(tags = {"Объявления"}, summary = "Получение объявлений", description = "Возвращает объявление по имени пользователя.")
+    @Operation(tags = {"Объявления"}, summary = "Получение объявлений",
+            description = "Получить все объявления по email пользователя")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @GetMapping("/me")
     ResponseEntity<ResponseWrapper<AdsDto>> getAdsMe(Authentication authentication) {
@@ -53,7 +55,8 @@ public class AdsController {
         return ResponseEntity.ok(ads);
     }
 
-    @Operation(tags = {"Объявления"}, summary = "Комментарии к объявлению", description = "Получить все комментарии к объявлению по id.")
+    @Operation(tags = {"Объявления"}, summary = "Комментарии к объявлению",
+            description = "Получить все комментарии к объявлению по id объявления в БД")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @GetMapping("/{ad_pk}/comments")
     ResponseEntity<ResponseWrapper<AdsComment>> getAdsComments(@PathVariable(value = "ad_pk") Long adsId) {
@@ -61,7 +64,8 @@ public class AdsController {
         return ResponseEntity.ok(ads);
     }
 
-    @Operation(tags = {"Объявления"}, summary = "Новый комментарий", description = "Создать новый коментарий к объявлению.")
+    @Operation(tags = {"Объявления"}, summary = "Новый комментарий",
+            description = "Создать новый коментарий к объявлению по id объявления")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @PostMapping("/{ad_pk}/comments")
     ResponseEntity<AdsComment> addAdsComment(@PathVariable(value = "ad_pk") Long adsId,
@@ -71,7 +75,8 @@ public class AdsController {
         return ResponseEntity.ok(adsService.addComment(adsId, comment, authentication));
     }
 
-    @Operation(tags = {"Объявления"}, summary = "Удаление комментариев", description = "Удаление комментариев  к объявлению по id (объявления/комментария).")
+    @Operation(tags = {"Объявления"}, summary = "Удаление комментария",
+            description = "Удалить комментарий  к объявлению по id объявления и комментария")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{ad_pk}/comments/{id}")
     ResponseEntity<?> deleteAdsComment(@PathVariable(value = "ad_pk") Long adsId,
@@ -81,7 +86,8 @@ public class AdsController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @Operation(tags = {"Объявления"}, summary = "Получить комментарий", description = "Получить комментарий к объявлению по id(объявления / комментария).")
+    @Operation(tags = {"Объявления"}, summary = "Получить комментарий",
+            description = "Получить комментарий к объявлению по id объявления и комментария")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @GetMapping("/{ad_pk}/comments/{id}")
     ResponseEntity<AdsComment> getAdsComment(@PathVariable(value = "ad_pk") Long adsId,
@@ -89,7 +95,8 @@ public class AdsController {
         return ResponseEntity.ok(adsService.getAdsComment(adsId, commentId));
     }
 
-    @Operation(tags = {"Объявления"}, summary = "Изминение комментария", description = "Изминение комментария по id ( объявления/комментария).")
+    @Operation(tags = {"Объявления"}, summary = "Изменение комментария",
+            description = "Изменение комментария по id объявления и комментария")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @PatchMapping("/{ad_pk}/comments/{id}")
     ResponseEntity<AdsComment> updateAdsComment(@PathVariable(value = "ad_pk") Long adsId,
@@ -99,7 +106,8 @@ public class AdsController {
         return ResponseEntity.ok(adsService.updateAdsComment(adsId, commentId, adsComment, authentication));
     }
 
-    @Operation(tags = {"Объявления"}, summary = "Удаление объявлений", description = "Удаление объявлений по id.")
+    @Operation(tags = {"Объявления"}, summary = "Удаление объявлений",
+            description = "Удалить объявлене по id объявления в БД")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     ResponseEntity<?> removeAds(@PathVariable Long id, Authentication authentication) {
@@ -107,14 +115,16 @@ public class AdsController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @Operation(tags = {"Объявления"}, summary = "Список объявлений", description = "Получить список всех объявлений по id.")
+    @Operation(tags = {"Объявления"}, summary = "Список объявлений",
+            description = "Получить полную информацию об объявлении по id объявления в БД")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @GetMapping("/{id}")
     ResponseEntity<FullAdsDto> getFullAds(@PathVariable Long id) {
         return ResponseEntity.ok(adsService.getFullAds(id));
     }
 
-    @Operation(tags = {"Объявления"}, summary = "Изминение объявлений", description = "Изминение объявлений по id.")
+    @Operation(tags = {"Объявления"}, summary = "Изменение объявления",
+            description = "Изменение объявлений по id объявления в БД")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @PatchMapping("/{id}")
     ResponseEntity<AdsDto> updateAds(@PathVariable Long id,

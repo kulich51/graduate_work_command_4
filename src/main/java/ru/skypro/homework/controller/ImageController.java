@@ -22,7 +22,8 @@ public class ImageController {
         this.adsService = adsService;
     }
 
-    @Operation(tags = {"Изображения"}, summary = "Получение изображения", description = "Полуение избражения по id.")
+    @Operation(tags = {"Изображения"}, summary = "Получение изображения",
+            description = "Получение избражения по id картинки в БД.")
     @GetMapping(value = "/{id}", produces = {MediaType.IMAGE_PNG_VALUE})
     public byte[] getAdsAvatar(@PathVariable("id") Long id) {
 

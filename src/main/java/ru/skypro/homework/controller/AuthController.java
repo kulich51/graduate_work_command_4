@@ -21,12 +21,12 @@ import static ru.skypro.homework.dto.Role.USER;
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "Авторизация", description = "Методы работы с авторизацией.")
+@Tag(name = "Авторизация", description = "Методы работы с авторизацией")
 public class AuthController {
 
     private final AuthService authService;
 
-    @Operation(tags = {"Авторизация"}, summary = "Вход в ЛК", description = "Осуществляет вход пользователя в ЛК по логину и паролю.")
+    @Operation(tags = {"Авторизация"}, summary = "Авторизация", description = "Войти в ЛК по логину и паролю")
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginReq req) {
         if (authService.login(req.getUsername(), req.getPassword())) {
@@ -36,7 +36,7 @@ public class AuthController {
         }
     }
 
-    @Operation(tags = {"Авторизация"}, summary = "Регистрация", description = "Осуществляет регистрацию пользователя на сайте.")
+    @Operation(tags = {"Авторизация"}, summary = "Регистрация", description = "Зарегистрировать нового пользователя")
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterReq req) {
         Role role = req.getRole() == null ? USER : req.getRole();
