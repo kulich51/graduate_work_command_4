@@ -10,6 +10,7 @@ import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.RegisterReq;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.entity.UserProfile;
+import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserProfileRepository;
 import ru.skypro.homework.service.AuthService;
 
@@ -54,8 +55,7 @@ public class AuthServiceImpl implements AuthService {
                         .build()
         );
 
-        UserProfile userProfile = new UserProfile();
-        userProfile.setEmail(registerReq.getUsername());
+        UserProfile userProfile = UserMapper.INSTANCE.registerReqToUserProfile(registerReq);
         userProfileRepository.save(userProfile);
         return true;
     }
