@@ -51,24 +51,22 @@ public class AdsServiceImpl implements AdsService {
     }
 
     /**
-     * Получить коллекцию объявлений по заголовку
-     * @param title заголовок объявления
-     * @return коллекция объявлений, содержащий переданный заголовок
+     * Получить коллекцию объявлений по заголовоку
+     * @param title заголовок объявлений
+     * @return коллекция объявлений, содержащих переданный заголовок
      */
     @Override
     public Collection<AdsDto> getAds(String title) {
         title = checkNullTitle(title);
         Collection<Ads> ads = adsRepository.findByTitleContainsOrderByTitle(title);
         return AdsMapper.INSTANCE.adsCollectionToAdsDto(ads);
-
     }
 
     /**
-     * Проверить заголовок на null
-     * @param title заголовок объявления
-     * @return заголовок объявления или пустую строку, если null
+     * Проверить, что заголовок объявления не null
+     * @param title заголовок объяления
+     * @return заголовок объявления или пустую строку, если заголовок null
      */
-
     private String checkNullTitle(String title) {
         if (title == null) {
             return "";
@@ -77,9 +75,9 @@ public class AdsServiceImpl implements AdsService {
     }
 
     /**
-     * Получить коллекцию объявлений по email
-     * @param email email зарегестрированного пользователя
-     * @return коллекция объявлений созданных пользователей с переданным email
+     * Получить коллекцию объявлений конкретного пользователя по email
+     * @param email email пользователя
+     * @return коллекция объявлений, созданных пользователем с переданным email
      */
     @Override
     public Collection<AdsDto> getAdsByUser(String email) {

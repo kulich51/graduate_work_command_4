@@ -49,10 +49,9 @@
           ├── UserProfileRepository.java
         ├── service
           ├── impl
-              ├── impl
-                ├── AdsServiceImpl.java
-                ├── AuthServiceImpl.java
-                ├── UserServiceImpl.java
+            ├── AdsServiceImpl.java
+            ├── AuthServiceImpl.java
+            ├── UserServiceImpl.java
           ├── AdsService.java
           ├── AuthService.java
           ├── UserService.java
@@ -62,7 +61,7 @@
 
 ## Бэкенд-часть проекта предполагает реализацию следующего функционала:
 
-- Авторизация и аутентификация пользователей;
+- Регистрация и авторизация пользователей;
 - Распределение ролей между пользователями: пользователь и администратор;
 - CRUD-операции для объявлений на сайте: администратор может удалять или редактировать все объявления, а пользователи — только
   свои;
