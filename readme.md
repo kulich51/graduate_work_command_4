@@ -96,10 +96,12 @@ http://localhost:3000
 
 ## Таблицы
 
-- image
-- ads
-- users_profiles
+
+
+- ads (хранить )
 - authorities
+- image
+- users_profiles
 - users
 - comments
 
