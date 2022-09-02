@@ -56,8 +56,8 @@
           ├── AdsService.java
           ├── AuthService.java
           ├── UserService.java
-      ├── HomeworkApplication
-      ├── WebSecurityConfig
+      ├── HomeworkApplication.java
+      ├── WebSecurityConfig.java
    
 
 ## Бэкенд-часть проекта предполагает реализацию следующего функционала:
