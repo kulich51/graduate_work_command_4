@@ -95,7 +95,7 @@ public class AdsServiceImpl implements AdsService {
             image.setData(photo.getBytes());
             image.setFileSize(photo.getBytes().length);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.info("AdsServiceImpl.saveImage: " + e.toString());
         }
         image.setMediaType(photo.getContentType());
         logger.info("saveImage: " + image.toString());
