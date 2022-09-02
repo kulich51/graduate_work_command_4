@@ -11,4 +11,5 @@ public class CreateAds {
     private final String title;
     private final int price;
     private final MultipartFile image;
+    private final String description;
 }
