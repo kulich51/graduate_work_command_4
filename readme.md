@@ -96,14 +96,16 @@ http://localhost:3000
 
 ## Таблицы
 
+Структура базы данных:
+![Alt text](https://github.com/kulich51/graduate_work_command_4/tree/dev/images)
 
-
-- ads (хранить )
-- authorities
-- image
-- users_profiles
-- users
-- comments
+Таблицы:
+- ads (хранит объявления)
+- authorities (хранит роли пользователей)
+- comments (хранит комментарии пользователей)
+- image (хранит картинки объявлений)
+- users (хранит пароли пользователей)
+- users_profiles (хранит данные пользователей)
 
 
 
