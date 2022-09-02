@@ -97,7 +97,7 @@ http://localhost:3000
 ## Таблицы
 
 Структура базы данных:
-![Alt text](https://github.com/kulich51/graduate_work_command_4/tree/dev/images)
+![Image alt](https://github.com/kulich51/graduate_work_command_4/tree/dev/images/db_diagram.png)
 
 Таблицы:
 - ads (хранит объявления)
