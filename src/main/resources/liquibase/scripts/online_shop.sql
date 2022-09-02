@@ -26,7 +26,7 @@ create table authorities
 );
 
 --changeset kulich51:table_users_profiles runOnChange:true
-drop table users_profiles;
+drop table if exists users_profiles;
 create table users_profiles
 (
     id serial primary key,
@@ -39,7 +39,7 @@ create table users_profiles
 );
 
 --changeset kulich51:table_ads runOnChange:true
-drop table ads;
+drop table if exists ads;
 create table ads
 (
     id      serial primary key,
@@ -62,3 +62,22 @@ alter table comments add constraint fk_ads_user_profiles foreign key (user_profi
 
 --changeset kulich51:ads_create_description_column
 alter table ads add column description text;
+
+--changeset kulich51:image_table
+create table image
+(
+    id          serial primary key,
+    data        bytea,
+    media_type  varchar(255),
+    file_size   bigint
+);
+
+--changeset kulich51:ads_add_image
+alter table ads drop column image;
+alter table ads add column image_id bigint;
+alter table ads add constraint fk_ads_image foreign key (image_id) references image(id);
+
+--changeset kulich51:user_profiles_drop_not_null
+alter table users_profiles alter column first_name drop not null,
+                           alter column last_name drop not null,
+                           alter column phone drop not null;

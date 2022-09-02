@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.controller.UserController;
 import ru.skypro.homework.dto.AdsComment;
 import ru.skypro.homework.dto.AdsDto;
@@ -11,17 +12,22 @@ import ru.skypro.homework.dto.CreateAds;
 import ru.skypro.homework.dto.FullAdsDto;
 import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.Comment;
+import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.entity.UserProfile;
 import ru.skypro.homework.exception.AccessDeniedException;
 import ru.skypro.homework.exception.AdsNotFoundException;
 import ru.skypro.homework.exception.CommentNotFoundException;
+import ru.skypro.homework.exception.ImageNotFoundException;
 import ru.skypro.homework.mapper.AdsMapper;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
+import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserProfileRepository;
 import ru.skypro.homework.service.AdsService;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -33,11 +39,15 @@ public class AdsServiceImpl implements AdsService {
     private final CommentRepository commentRepository;
     private final AdsRepository adsRepository;
     private final UserProfileRepository userProfileRepository;
+    private final ImageRepository imageRepository;
 
-    public AdsServiceImpl(CommentRepository commentRepository, AdsRepository adsRepository, UserProfileRepository userProfileRepository) {
+    private static String SOURCE_URL = "http://127.0.0.1:8080/";
+
+    public AdsServiceImpl(CommentRepository commentRepository, AdsRepository adsRepository, UserProfileRepository userProfileRepository, ImageRepository imageRepository) {
         this.commentRepository = commentRepository;
         this.adsRepository = adsRepository;
         this.userProfileRepository = userProfileRepository;
+        this.imageRepository = imageRepository;
     }
 
     @Override
@@ -45,10 +55,8 @@ public class AdsServiceImpl implements AdsService {
 
         title = checkNullTitle(title);
         Collection<Ads> ads = adsRepository.findByTitleContainsOrderByTitle(title);
-        logger.info("AdsServiceImpl.getAds: ".concat(ads.toString()));
-        return ads.stream()
-                .map(AdsMapper.INSTANCE::adsToAdsDto)
-                .collect(Collectors.toSet());
+        return AdsMapper.INSTANCE.adsCollectionToAdsDto(ads);
+
     }
 
     private String checkNullTitle(String title) {
@@ -59,12 +67,40 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdsDto save(CreateAds ads) {
+    public Collection<AdsDto> getAdsByUser(String email) {
 
-        Ads newAds = adsRepository.save(AdsMapper.INSTANCE.createAdsToAds(ads));
-        return AdsMapper.INSTANCE.adsToAdsDto(newAds);
+        Long authorId = userProfileRepository.getUserProfileId(email);
+        Collection<Ads> ads = adsRepository.findByAuthorId(authorId);
+        return AdsMapper.INSTANCE.adsCollectionToAdsDto(ads);
     }
 
+    @Override
+    public AdsDto save(CreateAds ads, String email, MultipartFile photo) {
+
+        Image savedImage = saveImage(photo);
+        logger.info("Photo have been saved");
+
+        Ads newAds = AdsMapper.INSTANCE.createAdsToAds(ads);
+        newAds.setAuthor(userProfileRepository.findByEmail(email));
+        newAds.setImage(savedImage);
+        logger.info("Save ads: " + newAds);
+        return AdsMapper
+                .INSTANCE
+                .adsToAdsDto(adsRepository.save(newAds));
+    }
+
+    private Image saveImage(MultipartFile photo) {
+        Image image = new Image();
+        try {
+            image.setData(photo.getBytes());
+            image.setFileSize(photo.getBytes().length);
+        } catch (IOException e) {
+            logger.info("AdsServiceImpl.saveImage: " + e.toString());
+        }
+        image.setMediaType(photo.getContentType());
+        logger.info("saveImage: " + image.toString());
+        return imageRepository.save(image);
+    }
 
     @Override
     public Collection<AdsComment> getAdsComments(Long adsId) {
@@ -76,9 +112,15 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdsComment addComment(Long adsId, AdsComment adsComment) {
+    public AdsComment addComment(Long adsId, AdsComment adsComment, Authentication authentication) {
+
+        Long userId = userProfileRepository.getUserProfileId(authentication.getName());
 
         Comment comment = CommentMapper.INSTANCE.adsCommentToComment(adsComment);
+
+        comment.setAuthor(userId);
+        comment.setCreatedAt(LocalDateTime.now());
+
         commentRepository.save(comment);
         return mapToAdsComment(comment);
     }
@@ -88,7 +130,6 @@ public class AdsServiceImpl implements AdsService {
 
         checkCommentAccess(adsId, commentId, authentication);
         commentRepository.deleteByAdsIdAndId(adsId, commentId);
-        logger.info("Comment delete successful");
     }
 
     @Override
@@ -102,16 +143,12 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public AdsComment updateAdsComment(Long adsId, Long commentId, AdsComment adsComment, Authentication authentication) {
 
-        Comment oldComment = commentRepository.getByAdsIdAndId(adsId, commentId).get();
-        if (oldComment != null) {
+        Comment comment = commentRepository.getByAdsIdAndId(adsId, commentId).orElseThrow(CommentNotFoundException::new);
 
-            checkCommentAccess(adsId, commentId, authentication);
-            Comment newComment = CommentMapper.INSTANCE.adsCommentToComment(adsComment);
-            newComment.setId(commentId);
-            newComment.setAdsId(adsId);
-            return mapToAdsComment(commentRepository.save(newComment));
-        }
-        throw new CommentNotFoundException();
+        checkCommentAccess(adsId, commentId, authentication);
+        // У старого комментария меняется только текст. Дата создания не меняется
+        comment.setText(adsComment.getText());
+        return mapToAdsComment(commentRepository.save(comment));
     }
 
     @Override
@@ -120,7 +157,6 @@ public class AdsServiceImpl implements AdsService {
         checkAdsAccess(adsId, authentication);
         commentRepository.deleteAllByAdsId(adsId);
         adsRepository.deleteAllById(adsId);
-        logger.info("Ads delete successful");
     }
 
     @Override
@@ -132,16 +168,48 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdsDto updateAds(AdsDto updatedAds, Authentication authentication) {
+    public AdsDto updateAds(Long id, AdsDto updatedAds, Authentication authentication) {
 
-        if (adsRepository.existsById(updatedAds.getPk())) {
-            checkAdsAccess(updatedAds.getPk(), authentication);
+        if (adsRepository.existsById(id)) {
+            Ads oldAds = adsRepository.findById(id).get();
+            checkAdsAccess(id, authentication);
+
+            // С фронта при корректировке объявления передаются только поля: description, price, title
+            // Остальные поля заполняются из сторой записи объявления
             Ads newAds = AdsMapper.INSTANCE.adsDtoToAds(updatedAds);
+            checkNewAdsForNullFields(oldAds, newAds);
+            newAds.setId(id);
+            newAds.setAuthor(oldAds.getAuthor());
+            newAds.setImage(oldAds.getImage());
             return AdsMapper
                     .INSTANCE
                     .adsToAdsDto(adsRepository.save(newAds));
         }
+
+        logger.info("AdsServiceImpl.updateAds: ads with id " + updatedAds.getPk() + " not found");
         throw  new AdsNotFoundException();
+    }
+
+    private void checkNewAdsForNullFields(Ads oldAds, Ads newAds) {
+
+        if (newAds.getTitle() == null) {
+            newAds.setTitle(oldAds.getTitle());
+        }
+
+        if (newAds.getDescription() == null) {
+            newAds.setDescription(oldAds.getDescription());
+        }
+
+        if (newAds.getPrice() == 0) {
+            newAds.setPrice(oldAds.getPrice());
+        }
+    }
+
+    @Override
+    public byte[] getImage(Long id) {
+
+        Image image = imageRepository.findById(id).orElseThrow(ImageNotFoundException::new);
+        return image.getData();
     }
 
     private AdsComment mapToAdsComment(Comment comment) {
@@ -162,7 +230,7 @@ public class AdsServiceImpl implements AdsService {
         FullAdsDto fullAds = new FullAdsDto();
         fullAds.setPk(ads.getId());
         fullAds.setTitle(ads.getTitle());
-        fullAds.setImage(ads.getImage());
+        fullAds.setImage(SOURCE_URL + ads.getImage().getId().toString());
         fullAds.setPrice(ads.getPrice());
         fullAds.setDescription(ads.getDescription());
         fullAds.setEmail(user.getEmail());

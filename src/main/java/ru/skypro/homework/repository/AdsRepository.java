@@ -15,4 +15,6 @@ public interface AdsRepository extends JpaRepository<Ads, Long> {
 
     @Query(nativeQuery = true, value = "select user_profile_id from ads where id = ?1")
     Long getUserProfileId(Long adsId);
+
+    Collection<Ads> findByAuthorId(Long id);
 }

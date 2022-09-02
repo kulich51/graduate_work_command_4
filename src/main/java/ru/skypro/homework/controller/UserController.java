@@ -2,19 +2,15 @@ package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.NewPassword;
-import ru.skypro.homework.dto.ResponseWrapper;
 import ru.skypro.homework.dto.User;
+import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.UserService;
-
-import java.util.Collection;
 
 @Slf4j
 @CrossOrigin(origins = "http://localhost:3000")
@@ -23,9 +19,8 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class UserController {
 
-    private static Logger logger = LoggerFactory.getLogger(UserController.class);
-
     private final UserService userService;
+    private final AuthService authService;
 
     @GetMapping("me")
     ResponseEntity<User> getUser(Authentication authentication) {
@@ -38,15 +33,14 @@ public class UserController {
     ResponseEntity<User> updateUser(@RequestBody User user, Authentication authentication) {
 
         user.setEmail(authentication.getName());
-        logger.info("Update user: ".concat(user.toString()));
         return ResponseEntity.ok(userService.update(user));
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @PostMapping("set_password")
-    ResponseEntity<NewPassword> changePassword(@RequestBody NewPassword newPassword) {
+    @PatchMapping("set_password")
+    ResponseEntity<NewPassword> changePassword(@RequestBody NewPassword newPassword, Authentication authentication) {
 
-        if (userService.changePassword(newPassword)) {
+        if (authService.changePassword(newPassword, authentication.getName())) {
             return ResponseEntity.ok(newPassword);
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();

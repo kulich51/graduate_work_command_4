@@ -6,9 +6,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.RegisterReq;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.entity.UserProfile;
+import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserProfileRepository;
 import ru.skypro.homework.service.AuthService;
 
@@ -32,6 +34,7 @@ public class AuthServiceImpl implements AuthService {
         if (!manager.userExists(userName)) {
             return false;
         }
+
         UserDetails userDetails = manager.loadUserByUsername(userName);
         String encryptedPassword = userDetails.getPassword();
         String encryptedPasswordWithoutEncryptionType = encryptedPassword.substring(8);
@@ -43,6 +46,7 @@ public class AuthServiceImpl implements AuthService {
         if (manager.userExists(registerReq.getUsername())) {
             return false;
         }
+
         manager.createUser(
                 User.withDefaultPasswordEncoder()
                         .password(registerReq.getPassword())
@@ -51,11 +55,21 @@ public class AuthServiceImpl implements AuthService {
                         .build()
         );
 
-// Во фронтенде ошибка. Имя, фамилия и телефон не передаются в бэкенд при регистрации
-//        UserProfile userProfile = UserMapper.INSTANCE.registerReqToUserProfile(registerReq);
-//        System.out.println(userProfile);
-//        userProfileRepository.save(userProfile);
-
+        UserProfile userProfile = UserMapper.INSTANCE.registerReqToUserProfile(registerReq);
+        userProfileRepository.save(userProfile);
         return true;
+    }
+
+    @Override
+    public boolean changePassword(NewPassword newPassword, String username) {
+
+        if (login(username, newPassword.getCurrentPassword())) {
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            manager.changePassword(
+                    newPassword.getCurrentPassword(),
+                    "{bcrypt}" + encoder.encode(newPassword.getNewPassword()));
+            return true;
+        }
+        return false;
     }
 }

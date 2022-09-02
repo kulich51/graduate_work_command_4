@@ -4,8 +4,11 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "ads")
-@SecondaryTable(name = "users_profiles", pkJoinColumns = @PrimaryKeyJoinColumn(
-        name = "user_profile_id", referencedColumnName = "id")
+@SecondaryTables(
+        {
+                @SecondaryTable(name = "users_profiles", pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_profile_id", referencedColumnName = "id")),
+                @SecondaryTable(name = "image", pkJoinColumns = @PrimaryKeyJoinColumn(name = "image_id", referencedColumnName = "id"))
+        }
 )
 public class FullAds {
 
@@ -17,8 +20,8 @@ public class FullAds {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "image")
-    private String image;
+    @Column(name = "image", table = "image")
+    private byte[] image;
 
     @Column(name = "price")
     private int price;
@@ -51,11 +54,11 @@ public class FullAds {
         this.title = title;
     }
 
-    public String getImage() {
+    public byte[] getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(byte[] image) {
         this.image = image;
     }
 

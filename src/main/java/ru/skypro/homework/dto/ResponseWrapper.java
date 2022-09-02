@@ -8,10 +8,10 @@ import java.util.Collection;
 public class ResponseWrapper<T> {
 
     private final int count;
-    private final Collection<T> data;
+    private final Collection<T> results;
 
-    public ResponseWrapper(Collection<T> data) {
-        this.count = data.size();
-        this.data = data;
+    public ResponseWrapper(Collection<T> results) {
+        this.count = results.size();
+        this.results = results;
     }
 }
