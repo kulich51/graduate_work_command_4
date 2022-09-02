@@ -1,5 +1,7 @@
 package ru.skypro.homework.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,17 +19,20 @@ import ru.skypro.homework.service.UserService;
 @RestController
 @RequestMapping("users")
 @RequiredArgsConstructor
+@Tag(name = "Пользователи", description = "Методы работы с пользователем.")
 public class UserController {
 
     private final UserService userService;
     private final AuthService authService;
 
+    @Operation(tags = {"Пользователи"}, summary = "Новый пользователь", description = "Создаёт ЛК нового пользователя.")
     @GetMapping("me")
     ResponseEntity<User> getUser(Authentication authentication) {
 
         return ResponseEntity.ok(userService.getUser(authentication.getName()));
     }
 
+    @Operation(tags = {"Пользователи"}, summary = "Изменение пользователя", description = "Изменяет старую информацию о пользователе на новую.")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @PatchMapping("me")
     ResponseEntity<User> updateUser(@RequestBody User user, Authentication authentication) {
@@ -36,6 +41,7 @@ public class UserController {
         return ResponseEntity.ok(userService.update(user));
     }
 
+    @Operation(tags = {"Пользователи"}, summary = "Изменение пароля", description = "Изменяет старый пароль пользователя на новый.")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @PatchMapping("set_password")
     ResponseEntity<NewPassword> changePassword(@RequestBody NewPassword newPassword, Authentication authentication) {
@@ -47,6 +53,7 @@ public class UserController {
         }
     }
 
+    @Operation(tags = {"Пользователи"}, summary = "Получение пользователя", description = "Получение пользователя по id.")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @GetMapping("{id}")
     ResponseEntity<User> getUserById(@PathVariable Long id) {
