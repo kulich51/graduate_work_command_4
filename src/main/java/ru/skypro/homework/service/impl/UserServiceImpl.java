@@ -19,6 +19,11 @@ public class UserServiceImpl implements UserService {
         this.userProfileRepository = userProfileRepository;
     }
 
+    /**
+     * Получить информацию о пользователе по email
+     * @param email email пользователя
+     * @return коллекцию запрашеваемого пользователя
+     */
     @Override
     public User getUser(String email) {
 
@@ -28,6 +33,11 @@ public class UserServiceImpl implements UserService {
                 .userProfileToUser(user);
     }
 
+    /**
+     * Изменить информацию о пользователе
+     * @param user пользователь
+     * @return сохранение обновленной информации в БД
+     */
     @Override
     public User update(User user) {
 
@@ -39,6 +49,12 @@ public class UserServiceImpl implements UserService {
                 .userProfileToUser(userProfileRepository.save(userProfile));
     }
 
+    /**
+     * Получить пользователя по id в БД
+     * @param id id пользователя
+     * @return получение пользователя из БД
+     * @throws UserNotFoundException если пользователь не найден
+     */
     @Override
     public User getUserById(Long id) {
 
@@ -49,6 +65,11 @@ public class UserServiceImpl implements UserService {
         throw new UserNotFoundException();
     }
 
+    /**
+     * Проверить email на null
+     * @param user пользователь
+     * @throws NullEmailException если null
+     */
     private void checkEmailNotNull(User user) {
 
         if (user.getEmail() == null) {
@@ -56,6 +77,11 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * Получить id пользователя
+     * @param email email пользователя
+     * @return id пользователя, если пользователь null, то возвращает null
+     */
     private Long getUserProfileId(String email) {
 
         UserProfile user = userProfileRepository.findByEmail(email);
