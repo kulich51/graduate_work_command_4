@@ -2,16 +2,73 @@
 
 Нужно собрать бэкенд-часть сайта на Java.
 
+## Структура проекта
+
+    
+    ├── java
+      ├── ru.skypro.homework
+        ├── controller
+          ├── AdsController.java
+          ├── AuthController.java
+          ├── BasicController.java
+          ├── ImageController.java
+          ├── UserController.java
+        ├── dto
+          ├── AdsComment.java
+          ├── AdsDto.java
+          ├── CreateAds.java
+          ├── CreateUser.java
+          ├── FullAdsDto.java
+          ├── LoginReq.java
+          ├── NewPassword.java
+          ├── RegisterReq.java
+          ├── ResponseWrapper.java
+          ├── Role.java
+          ├── User.java
+        ├── entity
+          ├── Ads.java
+          ├── Comment.java
+          ├── FullAds.java
+          ├── Image.java
+          ├── UserProfile.java
+        ├── exception
+          ├── AccessDeniedException.java
+          ├── AdsNotFoundException.java
+          ├── CommentNotFoundException.java
+          ├── ImageNotFoundException.java
+          ├── NullEmailException.java
+          ├── UserNotFoundException.java
+        ├── mapper
+          ├── AdsMapper.java
+          ├── CommentMapper.java
+          ├── UserMapper.java
+        ├── repository
+          ├── AdsRepository.java
+          ├── CommentRepository.java
+          ├── ImageRepository.java
+          ├── UserProfileRepository.java
+        ├── service
+          ├── impl
+              ├── impl
+                ├── AdsServiceImpl.java
+                ├── AuthServiceImpl.java
+                ├── UserServiceImpl.java
+          ├── AdsService.java
+          ├── AuthService.java
+          ├── UserService.java
+      ├── HomeworkApplication
+      ├── WebSecurityConfig
+   
+
 ## Бэкенд-часть проекта предполагает реализацию следующего функционала:
 
-- Авторизация и аутентификация пользователей.
-
-- Распределение ролей между пользователями: пользователь и администратор*.
+- Авторизация и аутентификация пользователей;
+- Распределение ролей между пользователями: пользователь и администратор;
 - CRUD для объявлений на сайте: администратор может удалять или редактировать все объявления, а пользователи — только
-  свои.
-- Под каждым объявлением пользователи могут оставлять отзывы.
-- В заголовке сайта можно осуществлять поиск объявлений по названию.
-- Показывать и сохранять картинки объявлений*.
+  свои;
+- Под каждым объявлением пользователи могут оставлять отзывы;
+- В заголовке сайта можно осуществлять поиск объявлений по названию;
+- Показывать и сохранять картинки объявлений;
 
 ## Этапы проекта 
 
