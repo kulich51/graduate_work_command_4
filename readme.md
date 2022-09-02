@@ -49,10 +49,9 @@
           ├── UserProfileRepository.java
         ├── service
           ├── impl
-              ├── impl
-                ├── AdsServiceImpl.java
-                ├── AuthServiceImpl.java
-                ├── UserServiceImpl.java
+            ├── AdsServiceImpl.java
+            ├── AuthServiceImpl.java
+            ├── UserServiceImpl.java
           ├── AdsService.java
           ├── AuthService.java
           ├── UserService.java
