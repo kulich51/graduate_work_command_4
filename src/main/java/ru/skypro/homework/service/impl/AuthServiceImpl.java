@@ -80,7 +80,6 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public boolean changePassword(NewPassword newPassword, String username) {
-
         if (login(username, newPassword.getCurrentPassword())) {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             manager.changePassword(

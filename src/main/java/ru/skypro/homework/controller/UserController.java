@@ -65,5 +65,4 @@ public class UserController {
     ResponseEntity<User> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getUserById(id));
     }
-
 }
